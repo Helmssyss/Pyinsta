@@ -13,7 +13,7 @@ class App(Instagram):
         self.__userN = username
         super().__init__(username, password)
         if not self.loginState:
-            print("ERROR")
+            print(f"{Console.RED}ERROR{Console.DEFAULT}")
         else:
             os.system("cls")
             print(f"{Console.CYAN}{self.__userN}>")
@@ -35,7 +35,7 @@ class App(Instagram):
                 _ = self.readNewDMessages()["info"]
                 print(f"{Console.ITALIC:<5}Sender: {_['sender']}")
                 print(f"{Console.ITALIC:<5}Senders Message: {_['msg']}")
-            
+
             elif _input_ == "x":
                 shutil.rmtree(f"C:\\Users\\{getuser()}\\Documents\\PyInsta")
                 print(f"{Console.RED}Checked out{Console.DEFAULT}")
@@ -45,9 +45,9 @@ class App(Instagram):
 if __name__ == "__main__":
     if not os.path.exists(f"C:\\Users\\{getuser()}\\Documents\\PyInsta\\.env") and not os.path.exists(f"C:\\Users\\{getuser()}\\Documents\\PyInsta\\account.ini"):
         try:
-            arg = ArgumentParser()
-            arg.add_argument('--username',help="Instagram Username",type=str)
-            arg.add_argument("--password",help="Instagram Password",type=str)
+            arg = ArgumentParser(description='Bu uygulama bazı işler yapıyor.',allow_abbrev=False)
+            arg.add_argument('-u','--username',required=False,help="Instagram Username",type=str)
+            arg.add_argument('-p',"--password",required=False,help="Instagram Password",type=str)
             parse = arg.parse_args()
             if sys.argv[2] and sys.argv[4]:
                 App(parse.username,parse.password)
