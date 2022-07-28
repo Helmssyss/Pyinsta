@@ -9,10 +9,13 @@ from PyInsta.utils import (URL_Shortened,LinkParser)
 
 class App(Instagram):
     def __init__(self, username: str = ..., password: str = ...) -> None:
+        self.__userN = username
         super().__init__(username, password)
         if not self.loginState:
             print("ERROR")
         else:
+            os.system("cls")
+            print(f"{Console.CYAN}{self.__userN}>")
             print(Console.BANNER)
             self.main()
     
@@ -23,7 +26,7 @@ class App(Instagram):
                 self.which_account = input(Console.COMMAND_LINE.replace("$","#"))
                 _ = self.instaAccount()["info"]
                 print(f"{'':<5}Biography:{'':<5} {'NaN' if _['bio'] == '' else _['bio']}")
-                print(f"{'':<5}Follow:{'':<7} {_['follow']}")
+                print(f"{'':<5}Follow:{'':<7}  {_['follow']}")
                 print(f"{'':<5}Followeed:{'':<5} {_['followeed']}")
                 print(f"{'':<5}Post Thumbnail: https://{LinkParser(URL_Shortened(_['thumbnail'])).parse}\n")
 
