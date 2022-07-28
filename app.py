@@ -1,6 +1,7 @@
 import os
 import sys
 import shutil
+from time import sleep
 from PyInsta import (Instagram,Console)
 from argparse import ArgumentParser
 from getpass import getuser
@@ -25,19 +26,21 @@ class App(Instagram):
             if _input_ == "0":
                 self.which_account = input(Console.COMMAND_LINE.replace("$","#"))
                 _ = self.instaAccount()["info"]
-                print(f"{'':<5}Biography:{'':<5} {'NaN' if _['bio'] == '' else _['bio']}")
-                print(f"{'':<5}Follow:{'':<7}  {_['follow']}")
-                print(f"{'':<5}Followeed:{'':<5} {_['followeed']}")
-                print(f"{'':<5}Post Thumbnail: https://{LinkParser(URL_Shortened(_['thumbnail'])).parse}\n")
+                print(f"{Console.ITALIC:<5}Biography:{'':<5} {'NaN' if _['bio'] == '' else _['bio']}")
+                print(f"{Console.ITALIC:<5}Follow:{'':<7}  {_['follow']}")
+                print(f"{Console.ITALIC:<5}Followeed:{'':<5} {_['followeed']}")
+                print(f"{Console.ITALIC:<5}Post Thumbnail: https://{LinkParser(URL_Shortened(_['thumbnail'])).parse}\n")
 
             elif _input_ == "1":
                 _ = self.readNewDMessages()["info"]
-                print(f"Sender: {_['sender']}\nSenders Message: {_['msg']}")
+                print(f"{Console.ITALIC:<5}Sender: {_['sender']}")
+                print(f"{Console.ITALIC:<5}Senders Message: {_['msg']}")
             
             elif _input_ == "x":
                 shutil.rmtree(f"C:\\Users\\{getuser()}\\Documents\\PyInsta")
-                print("Checked out")
-                break
+                print(f"{Console.RED}Checked out{Console.DEFAULT}")
+                sleep(1)
+                sys.exit(0)
 
 if __name__ == "__main__":
     if not os.path.exists(f"C:\\Users\\{getuser()}\\Documents\\PyInsta\\.env") and not os.path.exists(f"C:\\Users\\{getuser()}\\Documents\\PyInsta\\account.ini"):
@@ -49,7 +52,7 @@ if __name__ == "__main__":
             if sys.argv[2] and sys.argv[4]:
                 App(parse.username,parse.password)
         except IndexError:
-            print("Please Login First")
+            print(f"{Console.RED}Please Login First{Console.DEFAULT}")
     else:
         cfg = ConfigParser()
         cfg.read(f"C:\\Users\\{getuser()}\\Documents\\PyInsta\\account.ini","utf-8")
