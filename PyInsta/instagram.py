@@ -4,6 +4,7 @@ import json
 from datetime import datetime
 from fake_useragent import UserAgent
 from configparser import ConfigParser
+from .utils import(URL_Shortened,LinkParser)
 from getpass import getuser
 from dotenv import dotenv_values
 
@@ -14,6 +15,7 @@ class Instagram:
         self.__password = password
         self.__cookies = None
         self.loginState = True
+        self.__followeed = 0
         self.__cfg = ConfigParser()
         if not os.path.exists(f"{__accountinfo__}\\account.ini") and not os.path.exists(f"{__accountinfo__}\\.env"):
             __response = requests.get("https://www.instagram.com/accounts/login/")
@@ -86,11 +88,54 @@ class Instagram:
     
     def instaAccount(self) -> dict:
         __header = {
-            "User-Agent" : "Instagram 22.0.0.15.68 Android (23/6.0.1; 640dpi; 1440x2560; samsung; SM-G935F; hero2lte; samsungexynos8890; en_US)",
-            "content-type": "application/json; charset=utf-8",
-            "x-csrftoken" : self.__readConfig["csrftoken"],
+                "User-Agent" : "Instagram 22.0.0.15.68 Android (23/6.0.1; 640dpi; 1440x2560; samsung; SM-G935F; hero2lte; samsungexynos8890; en_US)",
+                "content-type": "application/json; charset=utf-8",
+                "x-csrftoken" : self.__readConfig["csrftoken"],
         }
         __cookies = {
+                "csrftoken" : self.__readConfig["csrftoken"],
+                "ds_user_id" : self.__readConfig["ds_user_id"],
+                "ig_did" : self.__readConfig["ig_did"],
+                "mid" : self.__readConfig["mid"],
+                "rur" : self.__readConfig["rur"],
+                "sessionid" : self.__readConfig["sessionid"]
+        }
+        __response = requests.get(f"https://i.instagram.com/api/v1/users/web_profile_info/?username={self.__username}",headers=__header,cookies=__cookies).json()
+        self.__followeed = __response["data"]["user"]["edge_followed_by"]["count"]
+        return {
+                "info":{
+                        "follow":__response["data"]["user"]["edge_follow"]["count"],
+                        "followeed" : __response["data"]["user"]["edge_followed_by"]["count"],
+                        "user_id" : __response["data"]["user"]["id"],
+                        "bio" : 'NaN'
+                                    if __response["data"]["user"]["biography"] == ''
+                                    else __response["data"]["user"]["biography"],
+                        "first_post_owner_comment" :'NaN' 
+                                                        if __response["data"]["user"]["edge_owner_to_timeline_media"]["edges"] == [] 
+                                                        else __response["data"]["user"]["edge_owner_to_timeline_media"]["edges"][0]["node"]["edge_media_to_caption"]["edges"][0]["node"]["text"],
+                        "thumbnail":'NaN'
+                                        if __response["data"]["user"]["edge_owner_to_timeline_media"]["edges"] == []
+                                        else 'https://'+LinkParser(URL_Shortened(__response["data"]["user"]["edge_owner_to_timeline_media"]["edges"][0]["node"]["thumbnail_src"])).parse,
+
+                        "first_post_id" :'NaN'
+                                            if __response["data"]["user"]["edge_owner_to_timeline_media"]["edges"] == []
+                                            else __response["data"]["user"]["edge_owner_to_timeline_media"]["edges"][0]["node"]["id"]
+                      }
+               }
+
+    def followAndFollowees(self):
+        # QVFBQXg0MmJ5bllEOUlYZGppeWdMVzY3azdQSjJaMkZ0OXBkcnNGd0c5SjFHNktMRGpZM2pqNjZGMGVNTnIyRkpPaUo3TkpGaFpFMkpPbC1ENnI5SmVxSA==
+        # QVFEekZkclUxeTY2MnBtazdLeHJFTlNGUU5VWEcxRm5nY3V3RFJvVkJrLUdnNFlRR09hNHU1cnlPbURMN0FOQUIwNld5SjBac3p5cUI0U0FQZnpkT2JNSA==
+        data ={
+            "count": "12",
+            "max_id": "QVFEekZkclUxeTY2MnBtazdLeHJFTlNGUU5VWEcxRm5nY3V3RFJvVkJrLUdnNFlRR09hNHU1cnlPbURMN0FOQUIwNld5SjBac3p5cUI0U0FQZnpkT2JNSA==",
+            "search_surface": "follow_list_page"
+        }
+        header = {
+            "User-Agent" : "Instagram 22.0.0.15.68 Android (23/6.0.1; 640dpi; 1440x2560; samsung; SM-G935F; hero2lte; samsungexynos8890; en_US)",
+            "x-csrftoken" : self.__readConfig["csrftoken"],
+        }
+        cookies = {
             "csrftoken" : self.__readConfig["csrftoken"],
             "ds_user_id" : self.__readConfig["ds_user_id"],
             "ig_did" : self.__readConfig["ig_did"],
@@ -98,18 +143,13 @@ class Instagram:
             "rur" : self.__readConfig["rur"],
             "sessionid" : self.__readConfig["sessionid"]
         }
-        __response = requests.get(f"https://i.instagram.com/api/v1/users/web_profile_info/?username={self.__username}",headers=__header,cookies=__cookies).json()
-        return {
-                "info":{
-                    "follow":__response["data"]["user"]["edge_follow"]["count"],
-                    "followeed" : __response["data"]["user"]["edge_followed_by"]["count"],
-                    "user_id" : __response["data"]["user"]["id"],
-                    "bio" : __response["data"]["user"]["biography"],
-                    "first_post_owner_comment" : __response["data"]["user"]["edge_owner_to_timeline_media"]["edges"][0]["node"]["edge_media_to_caption"]["edges"][0]["node"]["text"],
-                    "thumbnail":__response["data"]["user"]["edge_owner_to_timeline_media"]["edges"][0]["node"]["thumbnail_src"],
-                    "first_post_id" :__response["data"]["user"]["edge_owner_to_timeline_media"]["edges"][0]["node"]["id"],
-                      }
-               }
+        r = requests.get("https://i.instagram.com/api/v1/friendships/49096008445/followers/?",data=data,params=data,headers=header,cookies=cookies)
+        print("{:<10}".format("Takipçiler")+"\n"+"=="*10)
+        for i in range(0,self.__followeed):
+            response = requests.get("https://i.instagram.com/api/v1/friendships/49096008445/followers/?",data=data,cookies=cookies,headers=header).json()
+            print(f"{response['users'][i]['username']:<10}")
+            if i == 11:
+                data["max_id"] = r.json()["next_max_id"]
 
     def readNewDMessages(self):
         __header = {

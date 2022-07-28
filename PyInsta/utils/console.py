@@ -23,6 +23,6 @@ class Console:
                     {ITALIC}{GREEN}Helmsys{DEFAULT}
         {PURPLE}https://github.com/Arif-Helmsys{DEFAULT}
 
-{RED}[ {PURPLE}0{RED} ] Account Info
+{RED}[ {PURPLE}0{RED} ] Account Info(PUBLIC)
 [ {PURPLE}1{RED} ] Read Message{RED:<10} [ {PURPLE}x{RED} ] Logout of account
 """
