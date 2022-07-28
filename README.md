@@ -4,6 +4,7 @@ For Windows only
 
 ```bash
 >git clone https://github.com/Arif-Helmsys/Pyinsta.git
+>pip install -r requirements.txt
 ```
 *First Login*
 ```bash
