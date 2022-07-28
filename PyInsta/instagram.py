@@ -16,7 +16,7 @@ class Instagram:
         self.__cookies = None
         self.loginState = True
         self.__followeed = 0
-        self.userID = 0
+        self.__userID = 0
         self.__cfg = ConfigParser()
         if not os.path.exists(f"{__accountinfo__}\\account.ini") and not os.path.exists(f"{__accountinfo__}\\.env"):
             __response = requests.get("https://www.instagram.com/accounts/login/")
@@ -102,7 +102,7 @@ class Instagram:
         }
         __response = requests.get(f"https://i.instagram.com/api/v1/users/web_profile_info/?username={self.__username}",headers=__header,cookies=__cookies).json()
         self.__followeed = __response["data"]["user"]["edge_followed_by"]["count"]
-        self.userID = __response["data"]["user"]["id"]
+        self.__userID = __response["data"]["user"]["id"]
         return {
                 "info":{
                         "follow":__response["data"]["user"]["edge_follow"]["count"],
@@ -144,10 +144,10 @@ class Instagram:
             "rur" : self.__readConfig["rur"],
             "sessionid" : self.__readConfig["sessionid"]
         }
-        r = requests.get(f"https://i.instagram.com/api/v1/friendships/{self.userID}/followers/?",data=data,params=data,headers=header,cookies=cookies)
+        r = requests.get(f"https://i.instagram.com/api/v1/friendships/{self.__userID}/followers/?",data=data,params=data,headers=header,cookies=cookies)
         print("{:<10}".format("Takipçiler")+"\n"+"=="*10)
         for i in range(0,self.__followeed):
-            response = requests.get(f"https://i.instagram.com/api/v1/friendships/{self.userID}/followers/?",data=data,cookies=cookies,headers=header).json()
+            response = requests.get(f"https://i.instagram.com/api/v1/friendships/{self.__userID}/followers/?",data=data,cookies=cookies,headers=header).json()
             print(f"{response['users'][i]['username']:<10}")
             if i == 11:
                 data["max_id"] = r.json()["next_max_id"]
