@@ -32,12 +32,9 @@ class App(Instagram):
                 if __acc == self.__userN:
                     i = input("?\n╰──────>Do you want to see your followers: ")
                     if i == "y":
-                        self.followAndFollowees()
+                        self.followees()
                     elif i == "n":
-                        print("tamma")
-                        break
-                    else:
-                        break
+                        pass
 
             elif _input_ == "1":
                 _ = self.readNewDMessages()["info"]
