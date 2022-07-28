@@ -124,9 +124,7 @@ class Instagram:
                       }
                }
 
-    def followAndFollowees(self):
-        # QVFBQXg0MmJ5bllEOUlYZGppeWdMVzY3azdQSjJaMkZ0OXBkcnNGd0c5SjFHNktMRGpZM2pqNjZGMGVNTnIyRkpPaUo3TkpGaFpFMkpPbC1ENnI5SmVxSA==
-        # QVFEekZkclUxeTY2MnBtazdLeHJFTlNGUU5VWEcxRm5nY3V3RFJvVkJrLUdnNFlRR09hNHU1cnlPbURMN0FOQUIwNld5SjBac3p5cUI0U0FQZnpkT2JNSA==
+    def followees(self):
         data ={
             "count": "12",
             "max_id": "QVFEekZkclUxeTY2MnBtazdLeHJFTlNGUU5VWEcxRm5nY3V3RFJvVkJrLUdnNFlRR09hNHU1cnlPbURMN0FOQUIwNld5SjBac3p5cUI0U0FQZnpkT2JNSA==",
