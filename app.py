@@ -45,6 +45,7 @@ class App(Instagram):
                 shutil.rmtree(f"C:\\Users\\{getuser()}\\Documents\\PyInsta")
                 print(f"{Console.RED}Checked out{Console.DEFAULT}")
                 sleep(1)
+                os.system("cls")
                 sys.exit(0)
 
 if __name__ == "__main__":
