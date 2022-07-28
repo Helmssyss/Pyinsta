@@ -46,7 +46,6 @@ class Instagram:
         __json_data = json.loads(__response.text)
 
         if __json_data["authenticated"]:
-            print("Giriş Başarılı")
             json_resp = __response.cookies.get_dict()
             return [
                 {
