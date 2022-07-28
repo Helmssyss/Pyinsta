@@ -1,1 +1,3 @@
 # Instagram
+
+For Windows only
