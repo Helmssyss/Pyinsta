@@ -38,8 +38,9 @@ class App(Instagram): # Uygulamaya ait Ana Sınıf
 
             elif _input_ == "1":
                 _ = self.readNewDMessages()["info"] # İlk Sıradaki DM mesajını görüldü atmadan okur
-                print(f"{Console.ITALIC:<5}Sender: {_['sender']}") # Mesajı Atan
-                print(f"{Console.ITALIC:<5}Senders Message: {_['msg']}") # Mesajın kendisi
+                print(f"{Console.ITALIC:<5}Sender:{'':<11} {_['sender']}") # Mesajı Atan
+                print(f"{Console.ITALIC:<5}Senders Message:{'':<2} '{_['msg']}'") # Mesajın kendisi
+                print(f"{Console.ITALIC:<5}Time:{'':<12} {_['time']}")
 
             elif _input_ == "x":
                 shutil.rmtree(f"C:\\Users\\{getuser()}\\Documents\\PyInsta") # Yoldaki klasörü ve içerisindekileri ile siler

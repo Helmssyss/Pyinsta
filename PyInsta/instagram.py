@@ -95,15 +95,7 @@ class Instagram:
                 "content-type": "application/json; charset=utf-8",
                 "x-csrftoken" : self.__readConfig["csrftoken"],
         }
-        __cookies = {
-                "csrftoken" : self.__readConfig["csrftoken"],
-                "ds_user_id" : self.__readConfig["ds_user_id"],
-                "ig_did" : self.__readConfig["ig_did"],
-                "mid" : self.__readConfig["mid"],
-                "rur" : self.__readConfig["rur"],
-                "sessionid" : self.__readConfig["sessionid"]
-        }
-        __response = requests.get(f"https://i.instagram.com/api/v1/users/web_profile_info/?username={self.__username}",headers=__header,cookies=__cookies).json()
+        __response = requests.get(f"https://i.instagram.com/api/v1/users/web_profile_info/?username={self.__username}",headers=__header,cookies=self.__readConfig).json()
         self.__followeed = __response["data"]["user"]["edge_followed_by"]["count"]
         self.__userID = __response["data"]["user"]["id"]
         return {
@@ -137,18 +129,10 @@ class Instagram:
             "User-Agent" : "Instagram 22.0.0.15.68 Android (23/6.0.1; 640dpi; 1440x2560; samsung; SM-G935F; hero2lte; samsungexynos8890; en_US)",
             "x-csrftoken" : self.__readConfig["csrftoken"],
         }
-        cookies = {
-            "csrftoken" : self.__readConfig["csrftoken"],
-            "ds_user_id" : self.__readConfig["ds_user_id"],
-            "ig_did" : self.__readConfig["ig_did"],
-            "mid" : self.__readConfig["mid"],
-            "rur" : self.__readConfig["rur"],
-            "sessionid" : self.__readConfig["sessionid"]
-        }
-        r = requests.get(f"https://i.instagram.com/api/v1/friendships/{self.__userID}/followers/?",data=data,params=data,headers=header,cookies=cookies)
+        r = requests.get(f"https://i.instagram.com/api/v1/friendships/{self.__userID}/followers/?",data=data,params=data,headers=header,cookies=self.__readConfig)
         print("{:>10}".format("Takipçiler")+"\n"+"=="*10)
         for i in range(0,self.__followeed):
-            response = requests.get(f"https://i.instagram.com/api/v1/friendships/{self.__userID}/followers/?",data=data,cookies=cookies,headers=header).json()
+            response = requests.get(f"https://i.instagram.com/api/v1/friendships/{self.__userID}/followers/?",data=data,cookies=self.__readConfig,headers=header).json()
             print(f"{response['users'][i]['username']:<10}")
             if i == 11: # her 12'de bir max_id nin değerini değiştiriyor. Değiştirmez ise en başta yazılan ilk 12 kullanıcıyı gösterir
                 data["max_id"] = r.json()["next_max_id"] # değerini değiştiriyorum
@@ -159,20 +143,15 @@ class Instagram:
             "content-type": "application/json; charset=utf-8",
             "x-csrftoken" : self.__readConfig["csrftoken"],
         }
-        __cookies = {
-            "csrftoken" : self.__readConfig["csrftoken"],
-            "ds_user_id" : self.__readConfig["ds_user_id"],
-            "ig_did" : self.__readConfig["ig_did"],
-            "mid" : self.__readConfig["mid"],
-            "rur" : self.__readConfig["rur"],
-            "sessionid" : self.__readConfig["sessionid"]
-        }
-        __response = requests.get("https://i.instagram.com/api/v1/direct_v2/inbox/?persistentBadging=true&folder=&limit=10&thread_message_limit=10",cookies=__cookies,headers=__header).json()
+        __response = requests.get("https://i.instagram.com/api/v1/direct_v2/inbox/?persistentBadging=true&folder=&limit=10&thread_message_limit=10",cookies=self.__readConfig,headers=__header).json()
         __text = __response["inbox"]["threads"][0]["last_permanent_item"]["text"]
         __sender = __response["inbox"]["threads"][0]["thread_title"]
+        __time = str(__response["inbox"]["threads"][0]["items"][0]["timestamp"])
         return {
                 "info":{
                         "sender":__sender,
-                        "msg":__text
+                        "msg":__text,
+                        "time": str(datetime.fromtimestamp(float(__time[:10]+'.'+__time[10:]))) # timestamp türünde olan veriyi önce stringe çevirip ardından
+                                                                                                # float veri tipine dönüştürüyorum.
                       }
                }
