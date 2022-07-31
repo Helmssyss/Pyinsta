@@ -9,9 +9,9 @@ For Windows only
 ```
 *First Login*
 ```bash
->python .\Desktop\Pyinsta\app.py -u <username> -p <password>
+>python .\Pyinsta\app.py -u <username> -p <password>
 ```
 *Every entry for the next*
 ```bash
->python .\Desktop\Pyinsta\app.py
+>python .\Pyinsta\app.py
 ```
