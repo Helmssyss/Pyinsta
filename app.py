@@ -7,6 +7,8 @@ from argparse import ArgumentParser
 from getpass import getuser
 from configparser import ConfigParser
 
+# ?\n╰──────≻
+
 class App(Instagram): # Uygulamaya ait Ana Sınıf
     def __init__(self, username: str = ..., password: str = ...) -> None:
         self.__userN = username
@@ -25,22 +27,17 @@ class App(Instagram): # Uygulamaya ait Ana Sınıf
                 __acc = input(Console.COMMAND_LINE.replace("$","#"))
                 self.which_account = __acc
                 _ = self.instaAccount()["info"] # belirlenen instagram kullanıcısının bilgileri
-                print(f"{Console.ITALIC:<5}Biography:{'':<5} {_['bio']}")
-                print(f"{Console.ITALIC:<5}Follow:{'':<7}  {_['follow']}")
-                print(f"{Console.ITALIC:<5}Followeed:{'':<5} {_['followeed']}")
-                print(f"{Console.ITALIC:<5}Post Thumbnail: {_['thumbnail']}\n")
-                if __acc == self.__userN: # belirlenen instagram kullanıcısı eğer sen isen
-                    i = input("?\n╰──────≻ Do you want to see your followers: ")
-                    if i == "y":
-                        self.followees() # Takipçiler
-                    elif i == "n":
-                        pass
+                print(f"{Console.ITALIC:<5}Profile Picture: {_['profile_picture']}")
+                print(f"{Console.ITALIC:<5}Biography:{'':<5}  {_['bio']}")
+                print(f"{Console.ITALIC:<5}Follow:{'':<7}   {_['follow']}")
+                print(f"{Console.ITALIC:<5}Followeed:{'':<5}  {_['followeed']}")
+                print(f"{Console.ITALIC:<5}Post Thumbnail:  {_['thumbnail']}\n")
 
             elif _input_ == "1":
                 _ = self.readNewDMessages()["info"] # İlk Sıradaki DM mesajını görüldü atmadan okur
                 print(f"{Console.ITALIC:<5}Sender:{'':<11} {_['sender']}") # Mesajı Atan
-                print(f"{Console.ITALIC:<5}Senders Message:{'':<2} '{_['msg']}'") # Mesajın kendisi
-                print(f"{Console.ITALIC:<5}Time:{'':<12} {_['time']}")
+                print(f"{Console.ITALIC:<5}Senders Message:{'':<2}{_['msg']}") # Mesajın kendisi
+                print(f"{Console.ITALIC:<5}Time:{'':<12} {_['time']}\n")
 
             elif _input_ == "x":
                 shutil.rmtree(f"C:\\Users\\{getuser()}\\Documents\\PyInsta") # Yoldaki klasörü ve içerisindekileri ile siler

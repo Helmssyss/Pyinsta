@@ -17,6 +17,7 @@ class Instagram:
         self.__cookies = None # her methoddan erişebilmek adına başlangıç değerini "None" olarak atıyorum
         self.loginState = True # Instagram hesabı ile başarılı bir şekilde giriş yapılıp yapılmadığını kontrol ettiğim değişken
         self.__followeed = 0 # Takipçi sayısını saklayabileceğim değişken
+        self.__follow = 0 # Takip ettiği kişi sayısını saklayabileceğim değişken
         self.__userID = 0 # Kullanıcının user ID sine ulaşabilmek için kullandığım değişken
         self.__cfg = ConfigParser() # ".ini" dosyasının içeriğine değer yazabilmek için bu sınıfı dahil edip bundan bir obje oluşturuyorum
         if not os.path.exists(f"{__accountinfo__}\\account.ini") and not os.path.exists(f"{__accountinfo__}\\.env"):
@@ -49,7 +50,6 @@ class Instagram:
         }
         __response = requests.post("https://www.instagram.com/accounts/login/ajax/",data=__data,headers=__header) # ilgili linke post işlemi yapıyorum
         __json_data = json.loads(__response.text) # json formatına çeviriyorum
-
         if __json_data["authenticated"]: # belirlenen anahtar ve belirlenen anahtarın değeri True ise
             json_resp = __response.cookies.get_dict() # cookieleri çekiyorum
             return [ # çekilen cookieleri bir liste içerisinde sözlük kullanarak döndürüyorum
@@ -97,6 +97,7 @@ class Instagram:
         }
         __response = requests.get(f"https://i.instagram.com/api/v1/users/web_profile_info/?username={self.__username}",headers=__header,cookies=self.__readConfig).json()
         self.__followeed = __response["data"]["user"]["edge_followed_by"]["count"]
+        self.__follow = __response["data"]["user"]["edge_follow"]["count"]
         self.__userID = __response["data"]["user"]["id"]
         return {
                 "info":{
@@ -115,27 +116,10 @@ class Instagram:
 
                         "first_post_id" :'NaN' # eğer ifade boş bir liste döndürürse "NaN" döndürmezse ifadenin kendisini yazdır
                                             if __response["data"]["user"]["edge_owner_to_timeline_media"]["edges"] == []
-                                            else __response["data"]["user"]["edge_owner_to_timeline_media"]["edges"][0]["node"]["id"]
+                                            else __response["data"]["user"]["edge_owner_to_timeline_media"]["edges"][0]["node"]["id"],
+                        "profile_picture" : "https://"+LinkParser(URL_Shortened(__response["data"]["user"]["profile_pic_url_hd"])).parse
                       }
                }
-
-    def followees(self): # takipçiler
-        data ={
-            "count": "12",
-            "max_id": "QVFEekZkclUxeTY2MnBtazdLeHJFTlNGUU5VWEcxRm5nY3V3RFJvVkJrLUdnNFlRR09hNHU1cnlPbURMN0FOQUIwNld5SjBac3p5cUI0U0FQZnpkT2JNSA==",
-            "search_surface": "follow_list_page"
-        }
-        header = {
-            "User-Agent" : "Instagram 22.0.0.15.68 Android (23/6.0.1; 640dpi; 1440x2560; samsung; SM-G935F; hero2lte; samsungexynos8890; en_US)",
-            "x-csrftoken" : self.__readConfig["csrftoken"],
-        }
-        r = requests.get(f"https://i.instagram.com/api/v1/friendships/{self.__userID}/followers/?",data=data,params=data,headers=header,cookies=self.__readConfig)
-        print("{:>10}".format("Takipçiler")+"\n"+"=="*10)
-        for i in range(0,self.__followeed):
-            response = requests.get(f"https://i.instagram.com/api/v1/friendships/{self.__userID}/followers/?",data=data,cookies=self.__readConfig,headers=header).json()
-            print(f"{response['users'][i]['username']:<10}")
-            if i == 11: # her 12'de bir max_id nin değerini değiştiriyor. Değiştirmez ise en başta yazılan ilk 12 kullanıcıyı gösterir
-                data["max_id"] = r.json()["next_max_id"] # değerini değiştiriyorum
 
     def readNewDMessages(self): # İlk sıradaki DM mesajlarını okuduğumuz method
         __header = {
@@ -144,7 +128,7 @@ class Instagram:
             "x-csrftoken" : self.__readConfig["csrftoken"],
         }
         __response = requests.get("https://i.instagram.com/api/v1/direct_v2/inbox/?persistentBadging=true&folder=&limit=10&thread_message_limit=10",cookies=self.__readConfig,headers=__header).json()
-        __text = __response["inbox"]["threads"][0]["last_permanent_item"]["text"]
+        __text = __response["inbox"]["threads"][0]["last_permanent_item"]["text"] if not __response["inbox"]["threads"][0]["items"][0]["media_share"]["code"] else "Sent Video\n\t\t   ╰──────≻ "+"https://"+LinkParser(URL_Shortened("https://instagram.com/p/"+__response["inbox"]["threads"][0]["items"][0]["media_share"]["code"])).parse
         __sender = __response["inbox"]["threads"][0]["thread_title"]
         __time = str(__response["inbox"]["threads"][0]["items"][0]["timestamp"])
         return {

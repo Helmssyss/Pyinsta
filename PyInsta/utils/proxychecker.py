@@ -5,7 +5,7 @@ import requests
 
 class ProxyChecker:
     def __init__(self) -> None:
-        self.__url = "https://api.proxyscrape.com/v2/?request=getproxies&protocol=http&timeout=1000&country=all"
+        self.__url = "https://api.proxyscrape.com/v2/?request=getproxies&protocol=http&timeout=10000&country=all"
         self.__allproxy = None
         self.__worker = []
         for prxies in list(self.__scrap):
