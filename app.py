@@ -27,11 +27,12 @@ class App(Instagram): # Uygulamaya ait Ana Sınıf
                 __acc = input(Console.COMMAND_LINE.replace("$","#"))
                 self.which_account = __acc
                 _ = self.instaAccount()["info"] # belirlenen instagram kullanıcısının bilgileri
-                print(f"{Console.ITALIC:<5}Profile Picture: {_['profile_picture']}")
-                print(f"{Console.ITALIC:<5}Biography:{'':<5}  {_['bio']}")
-                print(f"{Console.ITALIC:<5}Follow:{'':<7}   {_['follow']}")
-                print(f"{Console.ITALIC:<5}Followeed:{'':<5}  {_['followeed']}")
-                print(f"{Console.ITALIC:<5}Post Thumbnail:  {_['thumbnail']}\n")
+                print(f"{Console.ITALIC:<5}Profile Picture:{'':<9} {_['profile_picture']}")
+                print(f"{Console.ITALIC:<5}Biography:{'':<15}{_['bio']}")
+                print(f"{Console.ITALIC:<5}Follow:{'':<18}{_['follow']}")
+                print(f"{Console.ITALIC:<5}Followeed:{'':<15}{_['followeed']}")
+                print(f"{Console.ITALIC:<5}This User Following me:{'':<3}{_['is_follow_me']}")
+                print(f"{Console.ITALIC:<5}Post Thumbnail:{'':<10} {_['thumbnail']}\n")
 
             elif _input_ == "1":
                 _ = self.readNewDMessages()["info"] # İlk Sıradaki DM mesajını görüldü atmadan okur
@@ -45,6 +46,11 @@ class App(Instagram): # Uygulamaya ait Ana Sınıf
                 sleep(1)
                 os.system("cls")
                 sys.exit(0)
+            elif _input_ == "e":
+                print(f"Bye{Console.DEFAULT}")
+                sleep(1)
+                os.system("cls")
+                break
 
 if __name__ == "__main__":
     if not os.path.exists(f"C:\\Users\\{getuser()}\\Documents\\PyInsta\\.env") and not os.path.exists(f"C:\\Users\\{getuser()}\\Documents\\PyInsta\\account.ini"):

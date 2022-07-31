@@ -21,8 +21,8 @@ class Console:
  _/ // /|  /___/ // / / ___ / /_/ / _, _/ ___ |/ /  / /  
 /___/_/ |_//____//_/ /_/  |_\____/_/ |_/_/  |_/_/  /_/
                     {ITALIC}{GREEN}Helmsys{DEFAULT}
-        {PURPLE}https://github.com/Arif-Helmsys{DEFAULT}
+        {PURPLE}https://github.com/Arif-Helmsys{RED}
 
-{RED}[ {PURPLE}0{RED} ] Account Info
+[ {PURPLE}0{RED} ] Account Info{'':<5} [ {PURPLE}e{RED} ] Exit
 [ {PURPLE}1{RED} ] Read Message{RED:<10} [ {PURPLE}x{RED} ] Logout of account
 """

@@ -117,7 +117,8 @@ class Instagram:
                         "first_post_id" :'NaN' # eğer ifade boş bir liste döndürürse "NaN" döndürmezse ifadenin kendisini yazdır
                                             if __response["data"]["user"]["edge_owner_to_timeline_media"]["edges"] == []
                                             else __response["data"]["user"]["edge_owner_to_timeline_media"]["edges"][0]["node"]["id"],
-                        "profile_picture" : "https://"+LinkParser(URL_Shortened(__response["data"]["user"]["profile_pic_url_hd"])).parse
+                        "profile_picture" : "https://"+LinkParser(URL_Shortened(__response["data"]["user"]["profile_pic_url_hd"])).parse,
+                        "is_follow_me" : "YES" if __response["data"]["user"]["follows_viewer"] else "NO"
                       }
                }
 
