@@ -3,7 +3,7 @@
 For Windows only
 
 ```bash
-> cd Desktop
+>cd Desktop
 >git clone https://github.com/Arif-Helmsys/Pyinsta.git
 >pip install -r .\Pyinsta\requirements.txt
 ```
