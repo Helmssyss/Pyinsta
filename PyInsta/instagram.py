@@ -129,7 +129,7 @@ class Instagram:
             "x-csrftoken" : self.__readConfig["csrftoken"],
         }
         __response = requests.get("https://i.instagram.com/api/v1/direct_v2/inbox/?persistentBadging=true&folder=&limit=10&thread_message_limit=10",cookies=self.__readConfig,headers=__header).json()
-        __text = __response["inbox"]["threads"][0]["last_permanent_item"]["text"] if not __response["inbox"]["threads"][0]["items"][0]["media_share"]["code"] else "Sent Video\n\t\t   ╰──────≻ "+"https://"+LinkParser(URL_Shortened("https://instagram.com/p/"+__response["inbox"]["threads"][0]["items"][0]["media_share"]["code"])).parse
+        __text = __response["inbox"]["threads"][0]["last_permanent_item"]["text"] #if not __response["inbox"]["threads"][0]["items"][0]["media_share"]["code"] else "Sent Video\n\t\t   ╰──────≻ "+"https://"+LinkParser(URL_Shortened("https://instagram.com/p/"+__response["inbox"]["threads"][0]["items"][0]["media_share"]["code"])).parse
         __sender = __response["inbox"]["threads"][0]["thread_title"]
         __time = str(__response["inbox"]["threads"][0]["items"][0]["timestamp"])
         return {
