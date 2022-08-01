@@ -128,10 +128,19 @@ class Instagram:
             "content-type": "application/json; charset=utf-8",
             "x-csrftoken" : self.__readConfig["csrftoken"],
         }
-        __response = requests.get("https://i.instagram.com/api/v1/direct_v2/inbox/?persistentBadging=true&folder=&limit=10&thread_message_limit=10",cookies=self.__readConfig,headers=__header).json()
-        __text = __response["inbox"]["threads"][0]["last_permanent_item"]["text"] #if not __response["inbox"]["threads"][0]["items"][0]["media_share"]["code"] else "Sent Video\n\t\t   ╰──────≻ "+"https://"+LinkParser(URL_Shortened("https://instagram.com/p/"+__response["inbox"]["threads"][0]["items"][0]["media_share"]["code"])).parse
+        __response = requests.get("https://i.instagram.com/api/v1/direct_v2/inbox/?persistentBadging=true&folder=&limit=10&thread_message_limit=10",
+                                  cookies=self.__readConfig,
+                                  headers=__header).json()
+        __text = ""
+        __items = __response["inbox"]["threads"][0]["items"][0]
+        for i in __items.values():
+            if i == "media_share":
+                __text = "https://"+LinkParser(URL_Shortened("https://www.instagram.com/p/"+__items[i]["code"])).parse
+            elif i == "text":
+                __text = __items["text"]
+            
         __sender = __response["inbox"]["threads"][0]["thread_title"]
-        __time = str(__response["inbox"]["threads"][0]["items"][0]["timestamp"])
+        __time = str(__items["timestamp"])
         return {
                 "info":{
                         "sender":__sender,

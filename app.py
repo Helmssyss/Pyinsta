@@ -36,7 +36,7 @@ class App(Instagram): # Uygulamaya ait Ana Sınıf
 
             elif _input_ == "1":
                 _ = self.readNewDMessages()["info"] # İlk Sıradaki DM mesajını görüldü atmadan okur
-                print(f"{Console.ITALIC:<5}Sender:{'':<11} {_['sender']}") # Mesajı Atan
+                print(f"{Console.ITALIC:<5}Sender:{'':<11}{_['sender']}") # Mesajı Atan
                 print(f"{Console.ITALIC:<5}Senders Message:{'':<2}{_['msg']}") # Mesajın kendisi
                 print(f"{Console.ITALIC:<5}Time:{'':<12} {_['time']}\n")
 
