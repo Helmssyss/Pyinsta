@@ -28,9 +28,9 @@ class App(Instagram): # Uygulamaya ait Ana Sınıf
                 self.which_account = __acc
                 _ = self.instaAccount()["info"] # belirlenen instagram kullanıcısının bilgileri
                 print(f"{Console.ITALIC:<5}Profile Picture:{'':<9} {_['profile_picture']}")
-                print(f"{Console.ITALIC:<5}Biography:{'':<15}{_['bio']}")
-                print(f"{Console.ITALIC:<5}Follow:{'':<18}{_['follow']}")
-                print(f"{Console.ITALIC:<5}Followeed:{'':<15}{_['followeed']}")
+                print(f"{Console.ITALIC:<5}Biography:{'':<16}{_['bio']}")
+                print(f"{Console.ITALIC:<5}Follow:{'':<19}{_['follow']}")
+                print(f"{Console.ITALIC:<5}Followeed:{'':<16}{_['followeed']}")
                 print(f"{Console.ITALIC:<5}This User Following me:{'':<3}{_['is_follow_me']}")
                 print(f"{Console.ITALIC:<5}Post Thumbnail:{'':<10} {_['thumbnail']}\n")
 
