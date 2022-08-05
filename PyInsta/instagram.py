@@ -107,9 +107,7 @@ class Instagram:
                         "bio" : 'NaN' # eğer ifade boş bir liste döndürürse "NaN" döndürmezse ifadenin kendisini yazdır
                                     if __response["data"]["user"]["biography"] == ''
                                     else __response["data"]["user"]["biography"],
-                        "first_post_owner_comment" :'NaN' # eğer ifade boş bir liste döndürürse "NaN" döndürmezse ifadenin kendisini yazdır
-                                                        if __response["data"]["user"]["edge_owner_to_timeline_media"]["edges"] == [] 
-                                                        else __response["data"]["user"]["edge_owner_to_timeline_media"]["edges"][0]["node"]["edge_media_to_caption"]["edges"][0]["node"]["text"],
+
                         "thumbnail":'NaN' # eğer ifade boş bir liste döndürürse "NaN" döndürmezse ifadenin kendisini yazdır
                                         if __response["data"]["user"]["edge_owner_to_timeline_media"]["edges"] == []
                                         else 'https://'+LinkParser(URL_Shortened(__response["data"]["user"]["edge_owner_to_timeline_media"]["edges"][0]["node"]["thumbnail_src"])).parse,
@@ -139,7 +137,7 @@ class Instagram:
             elif i == "text":
                 __text = __items["text"]
             
-        __sender = __response["inbox"]["threads"][0]["thread_title"]
+        __sender = __response["inbox"]["threads"][0]["users"][0]["username"]
         __time = str(__items["timestamp"])
         return {
                 "info":{

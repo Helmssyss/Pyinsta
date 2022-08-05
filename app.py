@@ -2,7 +2,7 @@ import os
 import sys
 import shutil
 from time import sleep
-from PyInsta import (Instagram,Console) # Instagram ve Console Sınıfları
+from PyInsta import (Instagram,Console,Bruter) # Instagram ve Console Sınıfları
 from argparse import ArgumentParser
 from getpass import getuser
 from configparser import ConfigParser
@@ -36,8 +36,8 @@ class App(Instagram): # Uygulamaya ait Ana Sınıf
 
             elif _input_ == "1":
                 _ = self.readNewDMessages()["info"] # İlk Sıradaki DM mesajını görüldü atmadan okur
-                print(f"{Console.ITALIC:<5}Sender:{'':<11}{_['sender']}") # Mesajı Atan
-                print(f"{Console.ITALIC:<5}Senders Message:{'':<2}{_['msg']}") # Mesajın kendisi
+                print(f"{Console.ITALIC:<5}Sender:{'':<11} {_['sender']}") # Mesajı Atan
+                print(f"{Console.ITALIC:<5}Senders Message:{'':<2}'{_['msg']}'") # Mesajın kendisi
                 print(f"{Console.ITALIC:<5}Time:{'':<12} {_['time']}\n")
 
             elif _input_ == "x":
@@ -52,20 +52,30 @@ class App(Instagram): # Uygulamaya ait Ana Sınıf
                 os.system("cls")
                 break
 
+def arguments():
+    arg = ArgumentParser(description='İlk kez Instagrama giriş yapabilmek İçin Argümanları girerek doldurun.',allow_abbrev=False)
+    arg.add_argument('-u','--username',help="Instagram Username",type=str)
+    arg.add_argument('-p',"--password",help="Instagram Password",type=str)
+    arg.add_argument('-px','--proxy',help="Proxy tipini belirtin [socks4, socks5, http]",type=str)
+    arg.add_argument('-v','--victim',help="Kurbanın kullanıcı adı",type=str)
+    arg.add_argument('-w','--wordlist',help="Wordlist yolu belirtin",type=str)
+    parse = arg.parse_args()
+    return parse
+
 if __name__ == "__main__":
-    if not os.path.exists(f"C:\\Users\\{getuser()}\\Documents\\PyInsta\\.env") and not os.path.exists(f"C:\\Users\\{getuser()}\\Documents\\PyInsta\\account.ini"):
-    # ".env" dosyası ve "account.ini" dosyası yok ise
-        try:
-            arg = ArgumentParser(description='İlk kez Instagrama giriş yapabilmek İçin Argümanları girerek doldurun.',allow_abbrev=False)
-            arg.add_argument('-u','--username',required=False,help="Instagram Username",type=str)
-            arg.add_argument('-p',"--password",required=False,help="Instagram Password",type=str)
-            parse = arg.parse_args()
-            if sys.argv[2] and sys.argv[4]: # kullanıcı adı ve parola girildiyse
-                App(parse.username,parse.password)
-        except IndexError: # kullanıcı adı ve parola girilmedi ise
-            print(f"{Console.RED}Please Login First{Console.DEFAULT}")
-    else: # ".env" dosyası ve "account.ini" dosyası var ise
-        cfg = ConfigParser() # ConfigParser sınıfından nesne oluşturulur
-        cfg.read(f"C:\\Users\\{getuser()}\\Documents\\PyInsta\\account.ini","utf-8") # nesneden okuma methodu çağırılıp içerisine ".ini" dosyasının yolu verilir
-        App(cfg["ACCOUNT"]["username"],cfg["ACCOUNT"]["password"])
-                     # Kullanıcı Adı  ,    # Parola 
+    arguments = arguments()
+    if arguments.proxy and arguments.wordlist and arguments.victim:
+            Bruter(wordlist=arguments.wordlist,proxy_type=arguments.proxy.lower(),victim=arguments.victim)
+    else:
+        if not os.path.exists(f"C:\\Users\\{getuser()}\\Documents\\PyInsta\\.env") and not os.path.exists(f"C:\\Users\\{getuser()}\\Documents\\PyInsta\\account.ini"):
+        # ".env" dosyası ve "account.ini" dosyası yok ise
+            try:
+                if sys.argv[2] and sys.argv[4]: # kullanıcı adı ve parola girildiyse
+                    App(arguments.username,arguments.password)
+            except IndexError: # kullanıcı adı ve parola girilmedi ise
+                print(f"{Console.RED}Please Login First{Console.DEFAULT}")
+        else: # ".env" dosyası ve "account.ini" dosyası var ise
+            cfg = ConfigParser() # ConfigParser sınıfından nesne oluşturulur
+            cfg.read(f"C:\\Users\\{getuser()}\\Documents\\PyInsta\\account.ini","utf-8") # nesneden okuma methodu çağırılıp içerisine ".ini" dosyasının yolu verilir
+            App(cfg["ACCOUNT"]["username"],cfg["ACCOUNT"]["password"])
+                        # Kullanıcı Adı  ,    # Parola 

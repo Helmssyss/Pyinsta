@@ -7,13 +7,27 @@ class Console:
     DARKCYAN  = '\033[36m'
     BLUE      = '\033[94m'
     GREEN     = '\033[92m'
-    YELLOW    = '\033[93m'
+    ORANGE    = '\033[93m'
     RED       = '\033[91m'
     BOLD      = '\033[1m'
     ITALIC    = '\x1B[3m'
     DEFAULT   = '\033[0m'
 
     COMMAND_LINE = f"{DEFAULT}{ITALIC}{GREEN}pyinsta@{getuser()}:{BLUE}~{os.getcwd().split(getuser())[1]}{DEFAULT}{BOLD}$ "
+    BANNER_BRUTE = f"""{RED}
+    ____           __                 
+   /  _/___  _____/ /_____ _ 
+   / // __ \/ ___/ __/ __ `/
+ _/ // / / (__  ) /_/ /_/ /
+/___/_/ /_/____/\__/\__,_/
+  \t     ____             __       ______                   
+  \t    / __ )_______  __/ /____  / ____/___  _____________ 
+  \t   / __  / ___/ / / / __/ _ \/ /_  / __ \/ ___/ ___/ _ \\
+  \t  / /_/ / /  / /_/ / /_/  __/ __/ / /_/ / /  / /__/  __/
+  \t /_____/_/   \__,_/\__/\___/_/    \____/_/   \___/\___/
+                           {ITALIC}{GREEN}Helmsys{DEFAULT}
+                 {PURPLE}https://github.com/Arif-Helmsys{RED}
+    """
     BANNER = f"""{CYAN}
     _____   ________________   __________  ___    __  ___
    /  _/ | / / ___/_  __/   | / ____/ __ \/   |  /  |/  /
