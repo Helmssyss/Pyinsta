@@ -28,4 +28,16 @@ This dm read only reads the top message (without leaving it seen). I guess I nee
 
 - It creates a folder named "PyInsta" in the "Documents" folder on our computer. If you want to delete it after using it, you can delete the folder mentioned in the path I mentioned yourself.
 
-It will be developed over time
+# BruteForce
+```bash
+> python .\Pyinsta\app.py -v user_name -w wordlist.txt -px http
+```
+```bash
+> python .\Pyinsta\app.py -v user_name -w wordlist.txt -px socks4
+```
+```bash
+> python .\Pyinsta\app.py -v user_name -w wordlist.txt -px socks5
+```
+
+
+It will be developed over time...
