@@ -53,18 +53,23 @@ class App(Instagram): # Uygulamaya ait Ana Sınıf
                 break
 
 def arguments():
-    arg = ArgumentParser(description='İlk kez Instagrama giriş yapabilmek İçin Argümanları girerek doldurun.',allow_abbrev=False)
+    arg = ArgumentParser(description='İlk kez Instagrama giriş yapabilmek İçin Argümanları girerek doldurun.',
+                        epilog="app.py -u my_user_name -p my_password")
     arg.add_argument('-u','--username',help="Instagram Username",type=str)
     arg.add_argument('-p',"--password",help="Instagram Password",type=str)
     arg.add_argument('-px','--proxy',help="Proxy tipini belirtin [socks4, socks5, http]",type=str)
     arg.add_argument('-v','--victim',help="Kurbanın kullanıcı adı",type=str)
     arg.add_argument('-w','--wordlist',help="Wordlist yolu belirtin",type=str)
+    arg.add_argument('-hb',"--help-brute")
     parse = arg.parse_args()
     return parse
 
 if __name__ == "__main__":
     arguments = arguments()
-    if arguments.proxy and arguments.wordlist and arguments.victim:
+    if arguments.help_brute == "help":
+        print("app.py -v user_name -w wordlist.txt -px http")
+
+    elif arguments.proxy and arguments.wordlist and arguments.victim:
             Bruter(wordlist=arguments.wordlist,proxy_type=arguments.proxy.lower(),victim=arguments.victim)
     else:
         if not os.path.exists(f"C:\\Users\\{getuser()}\\Documents\\PyInsta\\.env") and not os.path.exists(f"C:\\Users\\{getuser()}\\Documents\\PyInsta\\account.ini"):
