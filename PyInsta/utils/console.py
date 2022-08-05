@@ -15,7 +15,7 @@ class Console:
     DEFAULT   = '\033[0m'
 
     COMMAND_LINE = f"{DEFAULT}{ITALIC}{GREEN}pyinsta@{getuser()}:{BLUE}~{os.getcwd().split(getuser())[1]}{DEFAULT}{BOLD}$ "
-    BANNER_BRUTE = f"""{RED}
+    BANNER_BRUTE = f"""{BOLD}{RED}
     ____           __                 
    /  _/___  _____/ /_____ _ 
    / // __ \/ ___/ __/ __ `/
@@ -26,8 +26,8 @@ class Console:
   \t   / __  / ___/ / / / __/ _ \/ /_  / __ \/ ___/ ___/ _ \\
   \t  / /_/ / /  / /_/ / /_/  __/ __/ / /_/ / /  / /__/  __/
   \t /_____/_/   \__,_/\__/\___/_/    \____/_/   \___/\___/
-                           {ITALIC}{GREEN}Helmsys{DEFAULT}
-                 {PURPLE}https://github.com/Arif-Helmsys{RED}
+                              
+                              [R E A D Y]
 
         [ {PURPLE}x{RED} ] Exit
     """
@@ -43,9 +43,9 @@ class Console:
     [ {PURPLE}0{RED} ] Account Info{'':<5} [ {PURPLE}e{RED} ] Exit
     [ {PURPLE}1{RED} ] Read Message{RED:<10} [ {PURPLE}x{RED} ] Logout of account
     """
-def runnerBrute(passw,ip):
-  BANNER_RUNNING_BRUTE = f"""
-    ____           __                                         {strftime("%H:%M:%S")}
+def runnerBrute(passw,ip,words,prxies):
+  BANNER_RUNNING_BRUTE = f"""{Console.BOLD}{Console.CYAN}
+    ____           __                                         ╰─({strftime("%H:%M:%S")})─╯
    /  _/___  _____/ /_____ _ 
    / // __ \/ ___/ __/ __ `/
  _/ // / / (__  ) /_/ /_/ /
@@ -55,10 +55,8 @@ def runnerBrute(passw,ip):
   \t   / __  / ___/ / / / __/ _ \/ /_  / __ \/ ___/ ___/ _ \\
   \t  / /_/ / /  / /_/ / /_/  __/ __/ / /_/ / /  / /__/  __/
   \t /_____/_/   \__,_/\__/\___/_/    \____/_/   \___/\___/
-                                     {Console.ITALIC}{Console.GREEN}Helmsys{Console.DEFAULT}
-                       {Console.PURPLE}https://github.com/Arif-Helmsys{Console.RED}
               
-    {Console.RED}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] Trying Password : {Console.CYAN}{passw}       {Console.RED}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] Blocked IP: {Console.CYAN}{ip}
-
+    {Console.RED}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] Wordlist{'':<7} : {Console.CYAN}{words} word{Console.RED:>13}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] All Worker Proxy{'':<2}: {Console.CYAN}{prxies} proxy
+    {Console.RED}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] Trying Password : {Console.CYAN}{passw:<15}{Console.RED}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] Blocked Proxy{'':<5}: {Console.CYAN}{ip}
 """
   return BANNER_RUNNING_BRUTE

