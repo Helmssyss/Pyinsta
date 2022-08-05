@@ -29,7 +29,7 @@ class Console:
                               
                               [R E A D Y]
 
-        [ {PURPLE}x{RED} ] Exit
+        [ {PURPLE}x{RED} ] Exit            [{PURPLE}Press Enter{RED}]
     """
     BANNER = f"""{CYAN}
         _____   ________________   __________  ___    __  ___
@@ -43,9 +43,10 @@ class Console:
     [ {PURPLE}0{RED} ] Account Info{'':<5} [ {PURPLE}e{RED} ] Exit
     [ {PURPLE}1{RED} ] Read Message{RED:<10} [ {PURPLE}x{RED} ] Logout of account
     """
-def runnerBrute(passw,ip,words,prxies):
+def runnerBruteBanner(passw,ip,words,prxies,target):
   BANNER_RUNNING_BRUTE = f"""{Console.BOLD}{Console.CYAN}
-    ____           __                                         ╰─({strftime("%H:%M:%S")})─╯
+    target>{target}                 ╰─({strftime("%H:%M:%S")})─╯
+    ____           __                                         
    /  _/___  _____/ /_____ _ 
    / // __ \/ ___/ __/ __ `/
  _/ // / / (__  ) /_/ /_/ /
