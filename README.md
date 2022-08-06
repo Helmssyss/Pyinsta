@@ -5,15 +5,16 @@ For Windows only
 ```bash
 > cd Desktop
 > git clone https://github.com/Arif-Helmsys/Pyinsta.git
-> pip install -r .\Pyinsta\requirements.txt
+> cd Pyinsta
+> pip install -r requirements.txt
 ```
 *First Login*
 ```bash
-> python .\Pyinsta\app.py -u <username> -p <password>
+> python app.py -u <username> -p <password>
 ```
 *Every entry for the next*
 ```bash
-> python .\Pyinsta\app.py
+> python app.py
 ```
 
 As you can see in our command line, there is a "$" sign. It says it's on our main command line. If this sign is "#", it informs that we will take action on the previous line. I give an example;
@@ -30,13 +31,13 @@ This dm read only reads the top message (without leaving it seen). I guess I nee
 
 # BruteForce
 ```bash
-> python .\Pyinsta\app.py -v user_name -w wordlist.txt -px http
+> python app.py -v user_name -w wordlist.txt -px http
 ```
 ```bash
-> python .\Pyinsta\app.py -v user_name -w wordlist.txt -px socks4
+> python app.py -v user_name -w wordlist.txt -px socks4
 ```
 ```bash
-> python .\Pyinsta\app.py -v user_name -w wordlist.txt -px socks5
+> python app.py -v user_name -w wordlist.txt -px socks5
 ```
 
 
