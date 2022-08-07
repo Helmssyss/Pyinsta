@@ -1,6 +1,7 @@
 from getpass import getuser
+from time import sleep, strftime
 import os
-from time import strftime
+import sys
 
 class Console:
     PURPLE    = '\033[95m'
@@ -29,7 +30,7 @@ class Console:
                               
                               [R E A D Y]
 
-        [ {PURPLE}x{RED} ] Exit            [{PURPLE}Press Enter{RED}]
+        [ {PURPLE}x{RED} ] Exit           [{PURPLE}Press Enter{RED}]
     """
     BANNER = f"""{CYAN}
         _____   ________________   __________  ___    __  ___
@@ -58,6 +59,5 @@ def runnerBruteBanner(passw,ip,words,prxies,target):
   \t /_____/_/   \__,_/\__/\___/_/    \____/_/   \___/\___/
               
     {Console.RED}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] Wordlist{'':<7} : {Console.CYAN}{words} word{Console.RED:>13}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] All Worker Proxy{'':<2}: {Console.CYAN}{prxies} proxy
-    {Console.RED}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] Trying Password : {Console.CYAN}{passw:<15}{Console.RED}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] Blocked Proxy{'':<5}: {Console.CYAN}{ip}
-"""
+    {Console.RED}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] Trying Password : {Console.CYAN}{passw:<15}{Console.RED}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] Blocked Proxy{'':<5}: {Console.CYAN}{ip}"""
   return BANNER_RUNNING_BRUTE

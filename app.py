@@ -60,7 +60,7 @@ def arguments():
     arg.add_argument('-px','--proxy',help="Proxy tipini belirtin [socks4, socks5, http]",type=str)
     arg.add_argument('-v','--victim',help="Kurbanın kullanıcı adı",type=str)
     arg.add_argument('-w','--wordlist',help="Wordlist yolu belirtin",type=str)
-    arg.add_argument('-hb',"--help-brute")
+    arg.add_argument('-hb',"--help-brute",help="write 'help'")
     parse = arg.parse_args()
     return parse
 
