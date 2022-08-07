@@ -116,8 +116,7 @@ class Bruter:
 
     def __threadPool(self):
         first = time()
-        while True:
-            with ThreadPoolExecutor(max_workers=None) as executor:
+        with ThreadPoolExecutor(max_workers=None) as executor:
                 future_to_password = {executor.submit(self.__login,passw,30): passw for passw in self.__readerwordlist}
                 for future in as_completed(future_to_password):
                     value = future_to_password[future]
@@ -135,10 +134,9 @@ class Bruter:
                             break
                     except (requests.exceptions.ConnectionError,requests.exceptions.ReadTimeout):
                         pass
-            last = time()
-            now_time = int(last-first)
-            print(f"    {Console.BOLD}{Console.RED}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] Brute Force Attack is Completed\n\t  Attack lasted {str(now_time)+' seconds' if now_time < 60 else str((now_time/60).__round__(3))+' minute'}{Console.DEFAULT}")
-            if self.__isFind == False:
-                executor.shutdown(wait=False)
-                print(f"    {Console.BOLD}{Console.RED}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] Password not found!{Console.DEFAULT}")
-                break
+        last = time()
+        now_time = int(last-first)
+        print(f"    {Console.BOLD}{Console.RED}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] Brute Force Attack is Completed\n\t  Attack lasted {str(now_time)+' seconds' if now_time < 60 else str((now_time/60).__round__(3))+' minute'}{Console.DEFAULT}")
+        if self.__isFind == False:
+            executor.shutdown(wait=False)
+            print(f"    {Console.BOLD}{Console.RED}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] Password not found!{Console.DEFAULT}")
