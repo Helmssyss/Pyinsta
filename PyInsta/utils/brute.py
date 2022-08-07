@@ -39,14 +39,7 @@ class Bruter:
             print("No Working Proxy Found!")
         else:
             print(Console.BANNER_BRUTE)
-            _input = input(Console.COMMAND_LINE).lower()
-            if _input != 'x':
-                self.__threadPool()
-            else:
-                print('Byee')
-                sleep(1)
-                os.system("cls")
-                sys.exit(0)
+            self.__threadPool()
 
     @property
     def __readerwordlist(self):
@@ -138,5 +131,4 @@ class Bruter:
         now_time = int(last-first)
         print(f"    {Console.BOLD}{Console.RED}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] Brute Force Attack is Completed\n\t  Attack lasted {str(now_time)+' seconds' if now_time < 60 else str((now_time/60).__round__(3))+' minute'}{Console.DEFAULT}")
         if self.__isFind == False:
-            executor.shutdown(wait=False)
             print(f"    {Console.BOLD}{Console.RED}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] Password not found!{Console.DEFAULT}")

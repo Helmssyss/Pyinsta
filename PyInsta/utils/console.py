@@ -28,10 +28,7 @@ class Console:
   \t  / /_/ / /  / /_/ / /_/  __/ __/ / /_/ / /  / /__/  __/
   \t /_____/_/   \__,_/\__/\___/_/    \____/_/   \___/\___/
                               
-                              [R E A D Y]
-
-        [ {PURPLE}x{RED} ] Exit           [{PURPLE}Press Enter{RED}]
-    """
+                              [{PURPLE}R E A D Y{RED}]"""
     BANNER = f"""{CYAN}
         _____   ________________   __________  ___    __  ___
        /  _/ | / / ___/_  __/   | / ____/ __ \/   |  /  |/  /
@@ -46,7 +43,7 @@ class Console:
     """
 def runnerBruteBanner(passw,ip,words,prxies,target):
   BANNER_RUNNING_BRUTE = f"""{Console.BOLD}{Console.CYAN}
-    target>{target}                 ╰─({strftime("%H:%M:%S")})─╯
+target>{target}                           ╰─({strftime("%H:%M:%S")})─╯
     ____           __                                         
    /  _/___  _____/ /_____ _ 
    / // __ \/ ___/ __/ __ `/
