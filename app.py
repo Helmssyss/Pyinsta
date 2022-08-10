@@ -1,3 +1,6 @@
+# Author: Arif "Helmsys"
+# Python Version : 3.9.x
+
 import os
 import sys
 import shutil
@@ -6,8 +9,7 @@ from PyInsta import (Instagram,Console,Bruter) # Instagram ve Console Sınıflar
 from argparse import ArgumentParser
 from getpass import getuser
 from configparser import ConfigParser
-
-# ?\n╰──────≻
+from platform import python_version
 
 class App(Instagram): # Uygulamaya ait Ana Sınıf
     def __init__(self, username: str = ..., password: str = ...) -> None:
@@ -67,26 +69,29 @@ def arguments():
     return parse
 
 if __name__ == "__main__":
-    arguments = arguments()
-    if arguments.brute_force == "help":
-        print("-t/--thread   : THREAD Number")
-        print("-w/--wordlist : WORDLIST")
-        print("-v/--victim   : VICTIM")
-        print("-px/--proxy   : PROXY TYPE ['http','socks4','socks5'] or PROXY FILE\n")
-        print(f"{Console.GREEN}python app.py -v user_name -w wordlist.txt -px proxy_file.txt -t 40{Console.DEFAULT}")
+    if float(str(python_version()[:3])) == 3.9:
+        arguments = arguments()
+        if arguments.brute_force == "help":
+            print("-t/--thread   : THREAD Number")
+            print("-w/--wordlist : WORDLIST")
+            print("-v/--victim   : VICTIM")
+            print("-px/--proxy   : PROXY TYPE ['http','socks4','socks5'] or PROXY FILE\n")
+            print(f"{Console.GREEN}python app.py -v user_name -w wordlist.txt -px proxy_file.txt -t 40{Console.DEFAULT}")
 
-    elif arguments.proxy and arguments.wordlist and arguments.victim:
-            Bruter(wordlist=arguments.wordlist,proxy_type=arguments.proxy.lower(),victim=arguments.victim,max_thread=arguments.thread)
+        elif arguments.proxy and arguments.wordlist and arguments.victim:
+                Bruter(wordlist=arguments.wordlist,proxy_type=arguments.proxy.lower(),victim=arguments.victim,max_thread=arguments.thread)
+        else:
+            if not os.path.exists(f"C:\\Users\\{getuser()}\\Documents\\PyInsta\\.env") and not os.path.exists(f"C:\\Users\\{getuser()}\\Documents\\PyInsta\\account.ini"):
+            # ".env" dosyası ve "account.ini" dosyası yok ise
+                try:
+                    if sys.argv[2] and sys.argv[4]: # kullanıcı adı ve parola girildiyse
+                        App(arguments.username,arguments.password)
+                except IndexError: # kullanıcı adı ve parola girilmedi ise
+                    print(f"{Console.RED}Please Login First{Console.DEFAULT}")
+            else: # ".env" dosyası ve "account.ini" dosyası var ise
+                cfg = ConfigParser() # ConfigParser sınıfından nesne oluşturulur
+                cfg.read(f"C:\\Users\\{getuser()}\\Documents\\PyInsta\\account.ini","utf-8") # nesneden okuma methodu çağırılıp içerisine ".ini" dosyasının yolu verilir
+                App(cfg["ACCOUNT"]["username"],cfg["ACCOUNT"]["password"])
+                            # Kullanıcı Adı   ,    # Parola
     else:
-        if not os.path.exists(f"C:\\Users\\{getuser()}\\Documents\\PyInsta\\.env") and not os.path.exists(f"C:\\Users\\{getuser()}\\Documents\\PyInsta\\account.ini"):
-        # ".env" dosyası ve "account.ini" dosyası yok ise
-            try:
-                if sys.argv[2] and sys.argv[4]: # kullanıcı adı ve parola girildiyse
-                    App(arguments.username,arguments.password)
-            except IndexError: # kullanıcı adı ve parola girilmedi ise
-                print(f"{Console.RED}Please Login First{Console.DEFAULT}")
-        else: # ".env" dosyası ve "account.ini" dosyası var ise
-            cfg = ConfigParser() # ConfigParser sınıfından nesne oluşturulur
-            cfg.read(f"C:\\Users\\{getuser()}\\Documents\\PyInsta\\account.ini","utf-8") # nesneden okuma methodu çağırılıp içerisine ".ini" dosyasının yolu verilir
-            App(cfg["ACCOUNT"]["username"],cfg["ACCOUNT"]["password"])
-                        # Kullanıcı Adı  ,    # Parola 
+        print(f"{Console.RED}Only works in 3.9{Console.DEFAULT}")

