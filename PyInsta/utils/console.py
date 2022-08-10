@@ -14,6 +14,7 @@ class Console:
     BOLD      = '\033[1m'
     ITALIC    = '\x1B[3m'
     DEFAULT   = '\033[0m'
+    LINE      = '\033[F'
 
     COMMAND_LINE = f"{DEFAULT}{ITALIC}{GREEN}pyinsta@{getuser()}:{BLUE}~{os.getcwd().split(getuser())[1]}{DEFAULT}{BOLD}$ "
     BANNER_BRUTE = f"""{BOLD}{RED}
@@ -41,6 +42,13 @@ class Console:
     [ {PURPLE}0{RED} ] Account Info{'':<5} [ {PURPLE}e{RED} ] Exit
     [ {PURPLE}1{RED} ] Read Message{RED:<10} [ {PURPLE}x{RED} ] Logout of account
     """
+
+    def animPrint(self,char):
+      for i in char:
+        sys.stdout.write(i)
+        sys.stdout.flush()
+        sleep(0.002)
+      pass
 def runnerBruteBanner(passw,ip,words,prxies,target):
   BANNER_RUNNING_BRUTE = f"""{Console.BOLD}{Console.CYAN}
 target>{target}                           ╰─({strftime("%H:%M:%S")})─╯
@@ -56,5 +64,5 @@ target>{target}                           ╰─({strftime("%H:%M:%S")})─╯
   \t /_____/_/   \__,_/\__/\___/_/    \____/_/   \___/\___/
               
     {Console.RED}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] Wordlist{'':<7} : {Console.CYAN}{words} word{Console.RED:>13}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] All Worker Proxy{'':<2}: {Console.CYAN}{prxies} proxy
-    {Console.RED}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] Trying Password : {Console.CYAN}{passw:<15}{Console.RED}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] Blocked Proxy{'':<5}: {Console.CYAN}{ip}"""
+    {Console.RED}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] Trying Password : {Console.CYAN}{passw:<15}{Console.RED}[ {Console.PURPLE}!{Console.PURPLE} {Console.RED}] This Proxy{'':<8}: {Console.CYAN}{ip}"""
   return BANNER_RUNNING_BRUTE

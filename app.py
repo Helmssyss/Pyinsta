@@ -53,24 +53,30 @@ class App(Instagram): # Uygulamaya ait Ana Sınıf
                 break
 
 def arguments():
-    arg = ArgumentParser(description='İlk kez Instagrama giriş yapabilmek İçin Argümanları girerek doldurun.',
-                        epilog="app.py -u my_user_name -p my_password")
+    arg = ArgumentParser(description='How to Using',
+                        epilog=f"{Console.RED}First time to login to Instagram >{Console.GREEN}python app.py -u my_user_name -p my_password{Console.DEFAULT}")
     arg.add_argument('-u','--username',help="Instagram Username",type=str)
     arg.add_argument('-p',"--password",help="Instagram Password",type=str)
-    arg.add_argument('-px','--proxy',help="Proxy tipini belirtin [socks4, socks5, http]",type=str)
+    arg.add_argument('-px','--proxy',help="Proxy tipini belirtin [socks4, socks5, http] "\
+                                          "Ya da elinizde olan proxy dosyasını yazın",type=str)
     arg.add_argument('-v','--victim',help="Kurbanın kullanıcı adı",type=str)
     arg.add_argument('-w','--wordlist',help="Wordlist yolu belirtin",type=str)
-    arg.add_argument('-hb',"--help-brute",help="write 'help'")
+    arg.add_argument('-t','--thread',help="Thread Sayısını belirtin [4, 5, 6, ..., 40, ...]",type=int,default=40)
+    arg.add_argument('-b',"--brute-force",action='store_const',const="help")
     parse = arg.parse_args()
     return parse
 
 if __name__ == "__main__":
     arguments = arguments()
-    if arguments.help_brute == "help":
-        print("app.py -v user_name -w wordlist.txt -px http")
+    if arguments.brute_force == "help":
+        print("-t/--thread   : THREAD Number")
+        print("-w/--wordlist : WORDLIST")
+        print("-v/--victim   : VICTIM")
+        print("-px/--proxy   : PROXY TYPE ['http','socks4','socks5'] or PROXY FILE\n")
+        print(f"{Console.GREEN}python app.py -v user_name -w wordlist.txt -px proxy_file.txt -t 40{Console.DEFAULT}")
 
     elif arguments.proxy and arguments.wordlist and arguments.victim:
-            Bruter(wordlist=arguments.wordlist,proxy_type=arguments.proxy.lower(),victim=arguments.victim)
+            Bruter(wordlist=arguments.wordlist,proxy_type=arguments.proxy.lower(),victim=arguments.victim,max_thread=arguments.thread)
     else:
         if not os.path.exists(f"C:\\Users\\{getuser()}\\Documents\\PyInsta\\.env") and not os.path.exists(f"C:\\Users\\{getuser()}\\Documents\\PyInsta\\account.ini"):
         # ".env" dosyası ve "account.ini" dosyası yok ise
