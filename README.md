@@ -8,6 +8,11 @@ For Windows only
 > cd Pyinsta
 > pip install -r requirements.txt
 ```
+```bash
+> python app.py -h
+```
+
+
 *First Login*
 ```bash
 > python app.py -u <username> -p <password>
