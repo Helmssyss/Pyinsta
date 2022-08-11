@@ -56,7 +56,7 @@ This dm read only reads the top message (without leaving it seen). I guess I nee
 
 - It creates a folder named "PyInsta" in the "Documents" folder on our computer. If you want to delete it after using it, you can delete the folder mentioned in the path I mentioned yourself.
 
-# BruteForce
+# BruteForce For Instagram
 ```
 > python app.py -b
 -t/--thread   : THREAD Number
