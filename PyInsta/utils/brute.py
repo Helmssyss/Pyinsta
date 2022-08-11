@@ -136,7 +136,6 @@ class Bruter:
                 for worker in __threads:
                     worker.join()
                 
-                
                 if not self.__isAlive:
                     break
             
