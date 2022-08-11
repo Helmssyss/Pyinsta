@@ -1,10 +1,10 @@
-from time import time
 from .proxychecker import ProxyChecker
 from .console import (Console,runnerBruteBanner)
-from colorama import init,Fore
+from colorama import (init,Fore)
 from threading import (Thread,Lock)
 from queue import Queue
 from random import (choice,randint)
+from time import time
 import requests
 import json
 import uuid
