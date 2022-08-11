@@ -70,7 +70,6 @@ class Bruter:
                     s = session.post("https://i.instagram.com/api/v1/accounts/login/",data=__data,headers=__header,proxies=__proxies,timeout=randint(5,50))
 
                     json_load = json.loads(s.text)
-                    print(json_load)
                     for k,v in json_load.items():
                         if k == "logged_in_user":
                             self.__isAlive = False
