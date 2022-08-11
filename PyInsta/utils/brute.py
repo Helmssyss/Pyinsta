@@ -148,9 +148,9 @@ class Bruter:
                 print(f"{Fore.MAGENTA}[ {Fore.RED}!{Fore.MAGENTA} ] Password not found.{Fore.RESET}")
             
             else:
-                print(f"{Fore.MAGENTA}[ {Fore.RED}+{Fore.MAGENTA} ] Password is Found : {Console.CYAN}{self.__passw}{Fore.RESET}")
+                print(f"{Fore.MAGENTA}[ {Fore.RED}+{Fore.MAGENTA} ] Password is Found : {Fore.CYAN}{self.__passw}{Fore.RESET}")
 
-            print(f"{Fore.MAGENTA}[ {Fore.RED}-{Fore.MAGENTA} ] Brute Force Attack is completed\n[ {Console.CYAN}?{Fore.MAGENTA} ]\n  ╰────≻ Attack Lasted {str(now_time)+' Seconds.' if now_time < 60 else str((now_time/60).__round__(3))+' Minutes.'}{Fore.RESET}")
+            print(f"{Fore.MAGENTA}[ {Fore.RED}-{Fore.MAGENTA} ] Brute Force Attack is completed\n[ {Fore.CYAN}?{Fore.MAGENTA} ]\n  ╰────≻ Attack Lasted {str(now_time)+' Seconds.' if now_time < 60 else str((now_time/60).__round__(3))+' Minutes.'}{Fore.RESET}")
         
         except Exception as e:
             print(e)
