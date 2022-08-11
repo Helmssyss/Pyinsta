@@ -1,23 +1,16 @@
+from ast import For
 from getpass import getuser
 from time import sleep, strftime
+from colorama import init,Fore,Style
 import os
 import sys
 
+init(autoreset=True)
 class Console:
-    PURPLE    = '\033[95m'
-    CYAN      = '\033[96m'
-    DARKCYAN  = '\033[36m'
-    BLUE      = '\033[94m'
-    GREEN     = '\033[92m'
-    ORANGE    = '\033[93m'
-    RED       = '\033[91m'
     BOLD      = '\033[1m'
     ITALIC    = '\x1B[3m'
-    DEFAULT   = '\033[0m'
-    LINE      = '\033[F'
-
-    COMMAND_LINE = f"{DEFAULT}{ITALIC}{GREEN}pyinsta@{getuser()}:{BLUE}~{os.getcwd().split(getuser())[1]}{DEFAULT}{BOLD}$ "
-    BANNER_BRUTE = f"""{BOLD}{RED}
+    COMMAND_LINE = f"{Fore.RESET}{Style.BRIGHT}{Fore.GREEN}pyinsta@{getuser()}:{Fore.BLUE}~{os.getcwd().split(getuser())[1]}{Fore.RESET}{BOLD}$ "
+    BANNER_BRUTE = f"""{BOLD}{Fore.RED}
     ____           __                 
    /  _/___  _____/ /_____ _ 
    / // __ \/ ___/ __/ __ `/
@@ -29,25 +22,25 @@ class Console:
   \t  / /_/ / /  / /_/ / /_/  __/ __/ / /_/ / /  / /__/  __/
   \t /_____/_/   \__,_/\__/\___/_/    \____/_/   \___/\___/
                               
-                              [{PURPLE}R E A D Y{RED}]"""
-    BANNER = f"""{CYAN}
+                              [{Fore.MAGENTA}R E A D Y{Fore.RED}]"""
+    BANNER = f"""{Fore.CYAN}
         _____   ________________   __________  ___    __  ___
        /  _/ | / / ___/_  __/   | / ____/ __ \/   |  /  |/  /
        / //  |/ /\__ \ / / / /| |/ / __/ /_/ / /| | / /|_/ / 
      _/ // /|  /___/ // / / ___ / /_/ / _, _/ ___ |/ /  / /  
     /___/_/ |_//____//_/ /_/  |_\____/_/ |_/_/  |_/_/  /_/
-                        {ITALIC}{GREEN}Helmsys{DEFAULT}
-            {PURPLE}https://github.com/Arif-Helmsys{RED}
+                        {Style.BRIGHT}{Fore.GREEN}Helmsys{Fore.RESET}
+            {Fore.MAGENTA}https://github.com/Arif-Helmsys{Fore.RED}
 
-    [ {PURPLE}0{RED} ] Account Info{'':<5} [ {PURPLE}e{RED} ] Exit
-    [ {PURPLE}1{RED} ] Read Message{RED:<10} [ {PURPLE}x{RED} ] Logout of account
+    [ {Fore.MAGENTA}0{Fore.RED} ] Account Info{'':<5} [ {Fore.MAGENTA}e{Fore.RED} ] Exit
+    [ {Fore.MAGENTA}1{Fore.RED} ] Read Message{Fore.RED:<10} [ {Fore.MAGENTA}x{Fore.RED} ] Logout of account
     """
 
 def runnerBruteBanner(passw,ip,words,prxies,target):
   BANNER_RUNNING_BRUTE = f"""
-target>{target}                           {Console.PURPLE}╰─({Console.RED}{strftime("%H:%M:%S")}{Console.PURPLE})─╯
-[ {Console.RED}!{Console.PURPLE} ] Wordlist         : {Console.CYAN}{words}{Console.PURPLE} word
-[ {Console.RED}!{Console.PURPLE} ] All Worker Proxy : {Console.CYAN}{prxies}{Console.PURPLE} proxy
-[ {Console.RED}!{Console.PURPLE} ] Trying Password  : {Console.CYAN}{passw}{Console.PURPLE}
-[ {Console.RED}!{Console.PURPLE} ] This Proxy       : {Console.CYAN}{ip}{Console.PURPLE}"""
+target>{target}                           {Fore.MAGENTA}╰─({Fore.RED}{strftime("%H:%M:%S")}{Fore.MAGENTA})─╯
+[ {Fore.RED}!{Fore.MAGENTA} ] Wordlist         : {Fore.CYAN}{words}{Fore.MAGENTA} word
+[ {Fore.RED}!{Fore.MAGENTA} ] All Worker Proxy : {Fore.CYAN}{prxies}{Fore.MAGENTA} proxy
+[ {Fore.RED}!{Fore.MAGENTA} ] Trying Password  : {Fore.CYAN}{passw}{Fore.MAGENTA}
+[ {Fore.RED}!{Fore.MAGENTA} ] This Proxy       : {Fore.CYAN}{ip}{Fore.MAGENTA}"""
   return BANNER_RUNNING_BRUTE

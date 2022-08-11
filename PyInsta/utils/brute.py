@@ -1,6 +1,7 @@
 from time import time
 from .proxychecker import ProxyChecker
 from .console import (Console,runnerBruteBanner)
+from colorama import init,Fore
 from threading import (Thread,Lock)
 from queue import Queue
 from random import (choice,randint)
@@ -9,6 +10,7 @@ import json
 import uuid
 import os
 
+init(autoreset=True) # colorama
 class Bruter:
     def __init__(self,wordlist:str,proxy_type:str,victim:str,max_thread:int) -> None:
         self.__max_thread = max_thread
@@ -22,7 +24,7 @@ class Bruter:
         os.system("cls")
 
         if self.__proxy_type in self.__prxs:
-            print(f"{Console.ORANGE}[{self.__proxy_type}]  ─────  Proxy Checked is Starting")
+            print(f"{Fore.YELLOW}[{self.__proxy_type}]  ─────  Proxy Checked is Starting")
             self.__getproxy = ProxyChecker(self.__proxy_type).getWorkerProxy
     
         elif not self.__proxy_type in self.__prxs:
@@ -136,18 +138,19 @@ class Bruter:
                 for worker in __threads:
                     worker.join()
                 
+                
                 if not self.__isAlive:
                     break
             
             last = time()
             now_time = (last-first).__round__(3)
             if self.__isAlive:
-                print(f"{Console.PURPLE}[ {Console.RED}!{Console.PURPLE} ] Password not found.{Console.DEFAULT}")
+                print(f"{Fore.MAGENTA}[ {Fore.RED}!{Fore.MAGENTA} ] Password not found.{Fore.RESET}")
             
             else:
-                print(f"{Console.PURPLE}[ {Console.RED}+{Console.PURPLE} ] Password is Found : {Console.CYAN}{self.__passw}{Console.DEFAULT}")
+                print(f"{Fore.MAGENTA}[ {Fore.RED}+{Fore.MAGENTA} ] Password is Found : {Console.CYAN}{self.__passw}{Fore.RESET}")
 
-            print(f"{Console.PURPLE}[ {Console.RED}-{Console.PURPLE} ] Brute Force Attack is completed\n[ {Console.CYAN}?{Console.PURPLE} ]\n  ╰────≻ Attack Lasted {str(now_time)+' Seconds.' if now_time < 60 else str((now_time/60).__round__(3))+' Minutes.'}{Console.DEFAULT}")
+            print(f"{Fore.MAGENTA}[ {Fore.RED}-{Fore.MAGENTA} ] Brute Force Attack is completed\n[ {Console.CYAN}?{Fore.MAGENTA} ]\n  ╰────≻ Attack Lasted {str(now_time)+' Seconds.' if now_time < 60 else str((now_time/60).__round__(3))+' Minutes.'}{Fore.RESET}")
         
         except Exception as e:
             print(e)

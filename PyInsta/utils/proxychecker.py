@@ -2,9 +2,10 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from time import sleep
 from typing import Generator
 from bs4 import BeautifulSoup
-from .console import Console
+from colorama import init,Fore
 import requests
 
+init(autoreset=True)
 class ProxyChecker:
     def __init__(self,prxtype:str=...,isProxyPath:bool=False,filePath:str=...) -> None:
         self.__prxtype = prxtype
@@ -21,7 +22,7 @@ class ProxyChecker:
             self.__isWorkerProxy()
         else:
             try:
-                print(f"{Console.ORANGE}[{self.__filePath}]  ─────  Reading Proxy file")
+                print(f"{Fore.YELLOW}[{self.__filePath}]  ─────  Reading Proxy file")
                 sleep(2)
                 with open(self.__filePath,"r") as prxfile:
                     self.__allproxy =prxfile.readlines()
@@ -29,7 +30,7 @@ class ProxyChecker:
                         self.__allproxy[prx] = self.__allproxy[prx].replace("\n","")
                     self.__isWorkerProxy()
             except FileNotFoundError:
-                print(f"{Console.RED}Please Specify the Path of the Proxy File{Console.DEFAULT}")
+                print(f"{Fore.RED}Please Specify the Path of the Proxy File{Fore.RESET}")
 
     @property
     def __scrap(self) -> Generator[str,str,str]:
@@ -56,9 +57,9 @@ class ProxyChecker:
                 try:
                     future.result()
                 except:
-                    print(f"{Console.RED}UNSUCCESSFUL : {value}{Console.DEFAULT}")
+                    print(f"{Fore.RED}UNSUCCESSFUL : {value}{Fore.RESET}")
                 else:
-                    print(f"{Console.GREEN}SUCCESSFUL   : {value}{Console.DEFAULT}")
+                    print(f"{Fore.GREEN}SUCCESSFUL   : {value}{Fore.RESET}")
                     self.__worker.append(value)
     @property
     def getWorkerProxy(self) -> list[str]:
