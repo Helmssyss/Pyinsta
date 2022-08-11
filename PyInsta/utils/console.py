@@ -1,7 +1,7 @@
 from ast import For
 from getpass import getuser
-from time import sleep, strftime
-from colorama import init,Fore,Style
+from time import strftime
+from colorama import (init,Fore,Style)
 import os
 import sys
 
@@ -36,9 +36,27 @@ class Console:
     [ {Fore.MAGENTA}1{Fore.RED} ] Read Message{Fore.RED:<10} [ {Fore.MAGENTA}x{Fore.RED} ] Logout of account
     """
 
+    MULTI_ACCOUNT_BANNER = f"""{Fore.CYAN}    ____           __                 
+   /  _/___  _____/ /_____ _ 
+   / // __ \/ ___/ __/ __ `/
+ _/ // / / (__  ) /_/ /_/ /
+/___/_/ /_/____/\__/\__,_/
+             __  ___      ____  _
+            /  |/  /_  __/ / /_(_)
+           / /|_/ / / / / / __/ / 
+          / /  / / /_/ / / /_/ /  
+         /_/  /_/\__,_/_/\__/_/
+    ___                               __ 
+   /   | ______________  __  ______  / /_
+  / /| |/ ___/ ___/ __ \/ / / / __ \/ __/
+ / ___ / /__/ /__/ /_/ / /_/ / / / / /_  
+/_/  |_\___/\___/\____/\__,_/_/ /_/\__/
+                {Style.BRIGHT}{Fore.GREEN}Helmsys{Fore.RESET}"""
+
+
 def runnerBruteBanner(passw,ip,words,prxies,target):
   BANNER_RUNNING_BRUTE = f"""
-target>{target}                           {Fore.MAGENTA}╰─({Fore.RED}{strftime("%H:%M:%S")}{Fore.MAGENTA})─╯
+{Fore.MAGENTA}target>{target}                           {Fore.MAGENTA}╰─({Fore.RED}{strftime("%H:%M:%S")}{Fore.MAGENTA})─╯
 [ {Fore.RED}!{Fore.MAGENTA} ] Wordlist         : {Fore.CYAN}{words}{Fore.MAGENTA} word
 [ {Fore.RED}!{Fore.MAGENTA} ] All Worker Proxy : {Fore.CYAN}{prxies}{Fore.MAGENTA} proxy
 [ {Fore.RED}!{Fore.MAGENTA} ] Trying Password  : {Fore.CYAN}{passw}{Fore.MAGENTA}

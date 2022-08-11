@@ -96,6 +96,7 @@ class Instagram:
                 "x-csrftoken" : self.__readConfig["csrftoken"],
         }
         __response = requests.get(f"https://i.instagram.com/api/v1/users/web_profile_info/?username={self.__username}",headers=__header,cookies=self.__readConfig).json()
+        print(__response)
         self.__followeed = __response["data"]["user"]["edge_followed_by"]["count"]
         self.__follow = __response["data"]["user"]["edge_follow"]["count"]
         self.__userID = __response["data"]["user"]["id"]
