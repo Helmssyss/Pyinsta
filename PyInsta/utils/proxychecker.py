@@ -49,7 +49,7 @@ class ProxyChecker:
             session.get("https://httpbin.org/ip",timeout=timeout,proxies=p)
 
     def __isWorkerProxy(self):
-        with ThreadPoolExecutor(max_workers=len(self.__allproxy)//5) as ex:
+        with ThreadPoolExecutor(max_workers=len(self.__allproxy)) as ex:
             future_to_proxy = {ex.submit(self.__checkedProxy,30,prx):prx for prx in self.__allproxy}
             for future in as_completed(future_to_proxy):
                 value = future_to_proxy[future]

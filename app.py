@@ -59,11 +59,11 @@ def arguments():
                         epilog=f"{Console.RED}First time to login to Instagram >{Console.GREEN}python app.py -u my_user_name -p my_password{Console.DEFAULT}")
     arg.add_argument('-u','--username',help="Instagram Username",type=str)
     arg.add_argument('-p',"--password",help="Instagram Password",type=str)
-    arg.add_argument('-px','--proxy',help="Specify proxy type [socks4, socks5, http] "\
-                                          "Or write the proxy file you have",type=str)
-    arg.add_argument('-v','--victim',help="Victim username",type=str)
-    arg.add_argument('-w','--wordlist',help="Specify wordlist path",type=str)
-    arg.add_argument('-t','--thread',help="Specify Number of Threads [4, 5, 6, ..., 40, ...]",type=int,default=40)
+    arg.add_argument('-px','--proxy',help="Proxy tipini belirtin [socks4, socks5, http] "\
+                                          "Ya da elinizde olan proxy dosyasını yazın",type=str)
+    arg.add_argument('-v','--victim',help="Kurbanın kullanıcı adı",type=str)
+    arg.add_argument('-w','--wordlist',help="Wordlist yolu belirtin",type=str)
+    arg.add_argument('-t','--thread',help="Thread Sayısını belirtin [4, 5, 6, ..., 40, ...]",type=int,default=40)
     arg.add_argument('-b',"--brute-force",action='store_const',const="help")
     parse = arg.parse_args()
     return parse

