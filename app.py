@@ -13,6 +13,7 @@ from configparser import ConfigParser
 from platform import python_version
 
 init(autoreset=True) # Colorama
+version_control.ctrl.readLocalVersion
 class App(Instagram):
     def __init__(self, username: str = ..., password: str = ...) -> None:
         self.__userN = username
@@ -23,7 +24,6 @@ class App(Instagram):
 
         else:
             os.system("cls")
-            print(version_control.ctrl.readLocalVersion)
             print(f"{Fore.CYAN}{self.__userN}>{Console.BANNER}")
             self.main()
 
