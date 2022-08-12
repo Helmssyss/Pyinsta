@@ -4,10 +4,9 @@ import json
 from datetime import datetime
 from fake_useragent import UserAgent # user-agent sınıfı
 from configparser import ConfigParser
-from .utils import(URL_Shortened,LinkParser) # Kişinin paylaştığı en güncel post bir resim linki barındırıyor. O linke buradan ulaşıp linki kısaltan sınıfları
-                                             # ekliyorum
-from getpass import getuser # Bilgisayar adı kişiden kişiye değiştiği için gerekli gördüğüm fonksiyon
-from dotenv import dotenv_values # ".env" dosyasındaki "key=value" biçeminde yazılan ifadede "value"'a ulaşabilmek için bu fonksiyonu dahil ediyorum
+from .utils import(URL_Shortened,LinkParser)
+from getpass import getuser
+from dotenv import dotenv_values
 
 __accountinfo__ = f"C:\\Users\\{getuser()}\\Documents\\PyInsta" # "Belgelerim" klasörüne "PyInsta" adında klasör oluşturmak için verdiğim yol
 class Instagram:
@@ -144,7 +143,6 @@ class Instagram:
                 "info":{
                         "sender":__sender,
                         "msg":__text,
-                        "time": str(datetime.fromtimestamp(float(__time[:10]+'.'+__time[10:]))) # timestamp türünde olan veriyi önce stringe çevirip ardından
-                                                                                                # float veri tipine dönüştürüyorum.
+                        "time": str(datetime.fromtimestamp(float(__time[:10]+'.'+__time[10:])))
                       }
                }

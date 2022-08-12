@@ -1,8 +1,8 @@
 import requests
 
-
-class MultiAccount:
+class MultiAccount(requests.Session):
     def __init__(self) -> None:
-        pass
+        super().__init__()
 
+MultiAccount()
 # to be continued....
