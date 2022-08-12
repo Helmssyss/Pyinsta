@@ -2,7 +2,7 @@ import sys
 import os
 from time import sleep
 from Pydate import PyDate
-from utils import Console
+from .utils import Console
 
 __version__ = 0.1
 version_link = "https://raw.githubusercontent.com/Arif-Helmsys/Pyinsta/main/version.json"
