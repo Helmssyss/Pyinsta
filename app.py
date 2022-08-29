@@ -6,19 +6,17 @@ import sys
 import shutil
 from colorama import init,Fore
 from time import sleep
-from PyInsta import (Instagram,Console,Bruter,version_control)
+from PyInsta import (Instagram,Console,Bruter,InstagramCreateAccount)
 from argparse import ArgumentParser
 from getpass import getuser
 from configparser import ConfigParser
 from platform import python_version
 
 init(autoreset=True) # Colorama
-version_control.ctrl.readLocalVersion
 class App(Instagram):
     def __init__(self, username: str = ..., password: str = ...) -> None:
         self.__userN = username
         super().__init__(username, password)
-
         if not self.loginState:
             print(f"{Fore.RED}ERROR{Fore.RESET}")
 
@@ -62,7 +60,7 @@ class App(Instagram):
 
 def arguments():
     arg = ArgumentParser(description='How to Using',
-                        epilog=f"{Fore.RED}First time to login to Instagram >{Fore.GREEN}python app.py -u my_user_name -p my_password{Fore.RESET}")
+                        epilog=f"{Fore.RED}First time to login to Instagram > {Fore.GREEN}python app.py -u my_user_name -p my_password{Fore.RESET}")
     arg.add_argument('-u','--username',help="Instagram Username",type=str)
     arg.add_argument('-p',"--password",help="Instagram Password",type=str)
     arg.add_argument('-px','--proxy',help="Specify proxy type [socks4, socks5, http] "\
@@ -71,6 +69,7 @@ def arguments():
     arg.add_argument('-w','--wordlist',help="Specify wordlist path",type=str)
     arg.add_argument('-t','--thread',help="Specify Number of Threads [4, 5, 6, ..., 40, ...]",type=int,default=40)
     arg.add_argument('-b',"--brute-force",action='store_const',const="help")
+    arg.add_argument('-a',"--create-account",help="Create Instagram Multi Account",action='store_const',const="help")
     parse = arg.parse_args()
     return parse
 
@@ -84,6 +83,9 @@ if __name__ == "__main__":
             print("-px/--proxy   : PROXY TYPE ['http','socks4','socks5'] or PROXY FILE\n")
             print(f"{Fore.GREEN}python app.py -v user_name -w wordlist.txt -px proxy_file.txt -t 40{Fore.RESET}")
 
+        elif arguments.create_account:
+            InstagramCreateAccount()
+
         elif arguments.proxy and arguments.wordlist and arguments.victim:
                 Bruter(wordlist=arguments.wordlist,proxy_type=arguments.proxy.lower(),victim=arguments.victim,max_thread=arguments.thread)
 
@@ -94,7 +96,7 @@ if __name__ == "__main__":
                         App(arguments.username,arguments.password)
                 except IndexError:
                     print(f"{Fore.RED}Please Login First{Fore.RESET}")
-
+            
             else:
                 cfg = ConfigParser()
                 cfg.read(f"C:\\Users\\{getuser()}\\Documents\\PyInsta\\account.ini","utf-8")
