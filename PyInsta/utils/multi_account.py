@@ -1,3 +1,5 @@
+# to be continued...
+
 import json
 import os
 from pprint import pprint
@@ -122,3 +124,6 @@ class InstagramCreateAccount(TempMail):
             #     last_verify = session.post("https://www.instagram.com/accounts/web_create_ajax/",headers=__header,data=verify_dataV2)
             # if last_verify.status_code == 200:
             #     print("bitti")
+           
+        
+# to be continued...
