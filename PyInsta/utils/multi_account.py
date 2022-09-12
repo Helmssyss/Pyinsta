@@ -1,26 +1,26 @@
 # to be continued...
-
-import json
-import os
-from pprint import pprint
 from threading import Thread
 from urllib3 import disable_warnings
 from requests import Session
+from bs4 import BeautifulSoup
 from time import sleep
 from .console import Console
-# from .proxychecker import ProxyChecker
+from .proxychecker import ProxyChecker
+from colorama import (init, Fore)
 from datetime import datetime
 from random import (choice,randint)
 from string import ascii_uppercase
 import uuid
+import json
+import os
 
+init(autoreset=True)
 disable_warnings()
-
-
-class TempMail:
+accounts = {}
+errcount = 0
+class __TempMail:
     def __init__(self) -> None:
-        print(Console.MULTI_ACCOUNT_BANNER)
-        input("Merhaba: ")
+        print(f"\t🟡 {Fore.YELLOW}Creating E-Mail")
         self.verify_code = ""
         self.cookies = {}
         self.__header = {
@@ -35,42 +35,37 @@ class TempMail:
             }
         self.getPHPSESSID()
         self.createAccount()
-        Thread(target=self.inboxRefresh).start()
+        print(f"\t🟡 {Fore.YELLOW}E-mail: {self.cookies['TMA'].replace('%40','@')}")
+        Thread(target=self.inboxRefresh,daemon=True).start()
 
     def getPHPSESSID(self):
         with Session() as session:
             self.cookies.update(session.get("https://www.fakemail.net/",verify=False).cookies.get_dict())
-    
+
     def createAccount(self):
         with Session() as session:
             self.__header.update({"Cookie":f"PHPSESSID={self.cookies['PHPSESSID']}"})
             self.cookies.update(session.get("https://www.fakemail.net/index/index",verify=False,headers=self.__header).cookies.get_dict())
+            return
 
     def inboxRefresh(self):
         with Session() as session:
             self.__header.update({"Cookie":f"PHPSESSID={self.cookies['PHPSESSID']}; TMA={self.cookies['TMA']}; wpcc=dismiss"})
-            while True:
-                # os.system("cls")
-                print("E-mail: %s\n" % self.cookies['TMA'].replace('%40','@'))
+            while len(self.verify_code) < 1:
                 parsemsg = str(json.loads(session.get("https://www.fakemail.net/index/refresh",verify=False,headers=self.__header).text.replace(u'\ufeff',''))[0]['predmet'])
                 for i in parsemsg:
                     if i.isdigit():
                         self.verify_code += i
-                print(self.verify_code)
-                if len(self.verify_code) > 1:
-                    break
-                sleep(2)
+                sleep(1)
 
-class InstagramCreateAccount(TempMail):
+class InstagramCreateAccount(__TempMail):
     def __init__(self) -> None:
         super().__init__()
         self.__mail = self.cookies['TMA'].replace('%40','@')
         self.__redirectcookies = {}
-        self.redirectEmailSignUp()
-        self.attempt()
 
     def redirectEmailSignUp(self):
-        print("sa redirectEmailSignUp")
+        # print(f"\t🍪 {Fore.YELLOW}Getting Cookies")
         with Session() as session:
             header = {"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246"}
             proxy = {"http":f"http://proxy","https":f"http://proxy"}
@@ -85,45 +80,111 @@ class InstagramCreateAccount(TempMail):
         user_agent = f'Instagram {choice(i_version)} Android (30/3.0; {choice(dpi_phone)}dpi; {choice(pxl_phone)}; huawei/google; {choice(model_phone)}; angler; angler; en_US)'
         return user_agent
 
-    def attempt(self):
-        print("mrb attempt")
-        with Session() as session:
-            __header = {
-                "User-Agent":self.__useragents,
-                "x-csrftoken" :self.__redirectcookies['csrftoken']
-                }
-            __data = {
-                "enc_password"    : f"PWD_INSTAGRAM_BROWSER:0:{int(datetime.now().timestamp())}:password",
-                "email"           : self.__mail,
-                "username"        : self.__mail.split('@')[0],
-                "first_name"      : self.__mail.split('@')[0]+choice(list(ascii_uppercase)),
-                "opt_into_one_tap": "false"
-                }
-            account_create = session.post("https://www.instagram.com/accounts/web_create_ajax/attempt/",headers=__header,data=__data,cookies=self.__redirectcookies)
-            assert account_create.status_code == 200
-            age_data = {
-                "day"  : str(randint(1,31)),
-                "month": str(randint(1,12)),
-                "year" : str(randint(1919,2000))
-            }
-            check_Age = session.post('https://www.instagram.com/web/consent/check_age_eligibility/',headers=__header,data=age_data)
-            assert check_Age.status_code == 200
-            device = uuid.uuid4()
-            verify_data = {
-                'device_id':device,
-                'email':self.__mail
-                }
-            verify_mail = session.post("https://i.instagram.com/api/v1/accounts/send_verify_email/",headers=__header,data=verify_data)
-            assert verify_mail.status_code == 200
-            print("bitti")
-            #     verify_dataV2 = {
-            #         'code':self.verify_code,
-            #         'device_id':device,
-            #         'email':self.__mail
-            #     }
-            #     last_verify = session.post("https://www.instagram.com/accounts/web_create_ajax/",headers=__header,data=verify_dataV2)
-            # if last_verify.status_code == 200:
-            #     print("bitti")
-           
+    def randomPassword(self) -> list:
+        with Session() as passw:
+            __storage = []
+            soup = BeautifulSoup(passw.get("https://raw.githubusercontent.com/danielmiessler/SecLists/master/Passwords/months.txt").content,"lxml")
+            for i in soup.find_all("p"):
+                __storage.append(i.text.replace("\n","|"))
         
+        for j in __storage:
+            __storage = j.split("|")
+
+        __storage.remove("0")
+        return __storage
+
+    def attempt(self,count:int,password:str):
+        global errcount
+        print(f"\t🟡 {Fore.YELLOW}Password: {password}")
+        print(f"\t🟡 {Fore.YELLOW}Creating account")
+        with Session() as session:
+            try:
+                __header = {
+                    "User-Agent":self.__useragents,
+                    "x-csrftoken" :self.__redirectcookies['csrftoken']
+                    }
+                __data = {
+                    "enc_password"    : f"#PWD_INSTAGRAM_BROWSER:0:{int(datetime.now().timestamp())}:{password}",
+                    "email"           : self.__mail,
+                    "username"        : self.__mail.split('@')[0],
+                    "first_name"      : self.__mail.split('@')[0]+choice(list(ascii_uppercase)),
+                    "opt_into_one_tap": "false"
+                    }
+                account_create = session.post("https://www.instagram.com/accounts/web_create_ajax/attempt/",headers=__header,data=__data,cookies=self.__redirectcookies)
+                assert account_create.status_code == 200
+                age_data = {
+                        "day"  : str(randint(1,31)),
+                        "month": str(randint(1,12)),
+                        "year" : str(randint(1919,2000))
+                }
+                check_Age = session.post('https://www.instagram.com/web/consent/check_age_eligibility/',headers=__header,data=age_data)
+                assert check_Age.status_code == 200
+                device = uuid.uuid4().hex
+                verify_data = {
+                    'device_id':device,
+                    'email':self.__mail
+                }
+                verify_mail = session.post("https://i.instagram.com/api/v1/accounts/send_verify_email/",headers=__header,data=verify_data)
+                assert verify_mail.status_code == 200
+                while len(self.verify_code) < 1:
+                    sleep(1)
+                    verify_dataV2 = {
+                        'code':self.verify_code,
+                        'device_id':device,
+                        'email':self.__mail
+                    }
+                    if len(self.verify_code) > 1:
+                        check_code = session.post("https://i.instagram.com/api/v1/accounts/check_confirmation_code/",headers=__header,data=verify_dataV2)
+                        last_data = {
+                            "enc_password":__data["enc_password"],
+                            "email":__data["email"],
+                            "username":__data["username"],
+                            "first_name":__data["first_name"],
+                            "month":age_data["month"],
+                            "day":age_data["day"],
+                            "year":age_data["year"],
+                            "client_id":device,
+                            "seamless_login_enabled":'1',
+                            "tos_version":'eu',
+                            "force_sign_up_code":check_code.json()['signup_code']
+                        }
+                        last_verify = session.post("https://www.instagram.com/accounts/web_create_ajax/",headers=__header,data=last_data)
+                        
+                        accounts.update({count: {"mail" : self.__mail,"password":password,"user_name":__data["username"],
+                        "account_created" : last_verify.json()['account_created'],"user_id" : last_verify.json()['user_id'],"status" : last_verify.json()['status']}})
+
+                print(f"\t🟢 {Fore.YELLOW}Account Created")
+            except Exception as e:
+                print(f"\t🔴 {Fore.YELLOW}ERR {e}")
+                errcount += 1
+
+    def writeJsonFile(self):
+        with open("users.json","w") as file:
+            file.write(json.dumps(accounts))
+
+class MultiAccount:
+    def __init__(self) -> None:
+        print(Console.MULTI_ACCOUNT_BANNER+f"\tPlease write account cout\n\t\t[ {Fore.MAGENTA}e{Fore.CYAN} ] Exit\n")
+        while True:
+            input_ = input(Console.COMMAND_LINE)
+            if input_.lower() == 'e':
+                print("Bye")
+                sleep(1)
+                os.system("cls")
+                break
+            else:
+                try:
+                    for i in range(1,int(input_)+1):
+                        ig = InstagramCreateAccount()
+                        ig.redirectEmailSignUp()
+                        choice_passw = choice(ig.randomPassword())
+                        ig.attempt(count=i,password=choice_passw)
+
+                    print(f"\n\t🟣 {Fore.YELLOW}Written to users.json")
+                    ig.writeJsonFile()
+                    print(f"\t🟢 {Fore.YELLOW}Finished")
+                    print(f"\t🟡 {Fore.YELLOW}{errcount} Errors encountered")
+                    sleep(1)
+                except ValueError:
+                    print(f"\t🔴 {Fore.YELLOW}Undefined")
 # to be continued...
