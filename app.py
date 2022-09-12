@@ -1,7 +1,5 @@
 # Author: Arif "Helmsys"
 # Python Version : 3.9.x
-# Author: Arif "Helmsys"
-# Python Version : 3.9.x
 
 import os
 import sys
