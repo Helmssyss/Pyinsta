@@ -3,4 +3,3 @@ fake-useragent==0.1.11
 beautifulsoup4==4.11.1
 python-dotenv==0.20.0
 colorama==0.4.5
-pydater==1.0.5
