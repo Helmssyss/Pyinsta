@@ -1,3 +1,5 @@
+# Author: Helmsys
+
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from time import sleep
 from typing import Generator
