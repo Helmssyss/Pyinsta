@@ -1,3 +1,5 @@
+# Author: Arif "Helmsys"
+
 from getpass import getuser
 from time import strftime
 from colorama import (init,Fore,Style)
