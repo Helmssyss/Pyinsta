@@ -1,3 +1,4 @@
+import sys
 from threading import Thread
 from urllib3 import disable_warnings
 from requests import Session
@@ -17,8 +18,19 @@ init(autoreset=True)
 disable_warnings()
 accounts = {}
 errcount = 0
-class __TempMail:
-    def __init__(self) -> None:
+usingProxy = False
+proxyList = []
+class __TempMail(ProxyChecker):
+    def __init__(self,prxtype,first:int) -> None:
+        global usingProxy
+        if first == 1:
+            usingProxy = True
+            super().__init__(prxtype=prxtype,isProxyPath=True if prxtype not in ['http','socks4','socks5'] else False, filePath=prxtype)
+            os.system('cls' if os.name == 'nt' else 'clear')
+            print(Console.MULTI_ACCOUNT_BANNER)
+            for i in self.getWorkerProxy:
+                proxyList.append(i)
+        
         print(f"\t🟡 {Fore.YELLOW}Creating E-Mail")
         self.verify_code = ""
         self.cookies = {}
@@ -35,7 +47,8 @@ class __TempMail:
         self.getPHPSESSID()
         self.createAccount()
         print(f"\t🟡 {Fore.YELLOW}E-mail: {self.cookies['TMA'].replace('%40','@')}")
-        Thread(target=self.inboxRefresh,daemon=True).start()
+        t = Thread(target=self.inboxRefresh,daemon=True)
+        t.start()
 
     def getPHPSESSID(self):
         with Session() as session:
@@ -58,17 +71,20 @@ class __TempMail:
                 sleep(1)
 
 class InstagramCreateAccount(__TempMail):
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self,prxtype_:str,first:int) -> None:
+        super().__init__(prxtype=prxtype_,first=first)
+        self.__prxtype=prxtype_
         self.__mail = self.cookies['TMA'].replace('%40','@')
         self.__redirectcookies = {}
 
     def redirectEmailSignUp(self):
         # print(f"\t🍪 {Fore.YELLOW}Getting Cookies")
-        with Session() as session:
-            header = {"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246"}
-            proxy = {"http":f"http://proxy","https":f"http://proxy"}
-            self.__redirectcookies.update(session.get("https://www.instagram.com/accounts/emailsignup/",headers=header).cookies.get_dict())
+        try:
+            with Session() as session:
+                header = {"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246"}
+                self.__redirectcookies.update(session.get("https://www.instagram.com/accounts/emailsignup/",headers=header).cookies.get_dict())
+        except:
+            pass
 
     @property
     def __useragents(self):
@@ -85,7 +101,7 @@ class InstagramCreateAccount(__TempMail):
             soup = BeautifulSoup(passw.get("https://raw.githubusercontent.com/danielmiessler/SecLists/master/Passwords/months.txt").content,"lxml")
             for i in soup.find_all("p"):
                 __storage.append(i.text.replace("\n","|"))
-        
+
         for j in __storage:
             __storage = j.split("|")
 
@@ -95,7 +111,6 @@ class InstagramCreateAccount(__TempMail):
     def attempt(self,count:int,password:str):
         global errcount
         print(f"\t🟡 {Fore.YELLOW}Password: {password}")
-        print(f"\t🟡 {Fore.YELLOW}Creating account")
         with Session() as session:
             try:
                 __header = {
@@ -108,22 +123,32 @@ class InstagramCreateAccount(__TempMail):
                     "username"        : self.__mail.split('@')[0],
                     "first_name"      : self.__mail.split('@')[0]+choice(list(ascii_uppercase)),
                     "opt_into_one_tap": "false"
-                    }
-                account_create = session.post("https://www.instagram.com/accounts/web_create_ajax/attempt/",headers=__header,data=__data,cookies=self.__redirectcookies)
+                }
+                proxy = None
+                if self.__prxtype != 'false':
+                    choice_proxy = choice(proxyList)
+                    proxy = {"http":f"{self.__prxtype}://{choice_proxy}","https":f"{self.__prxtype}://{choice_proxy}"}
+                    
+                    if self.__prxtype not in ['http','socks4','socks5']:
+                        proxy = {"http":f"http://{choice_proxy}","https":f"http://{choice_proxy}"}
+                    
+                    print(f"\t🟡 {Fore.YELLOW}Proxy:  {choice_proxy}")
+                print(f"\t🟡 {Fore.YELLOW}Creating account")
+                account_create = session.post("https://www.instagram.com/accounts/web_create_ajax/attempt/",headers=__header,data=__data,cookies=self.__redirectcookies,proxies=proxy)
                 assert account_create.status_code == 200
                 age_data = {
                         "day"  : str(randint(1,31)),
                         "month": str(randint(1,12)),
                         "year" : str(randint(1919,2000))
                 }
-                check_Age = session.post('https://www.instagram.com/web/consent/check_age_eligibility/',headers=__header,data=age_data)
+                check_Age = session.post('https://www.instagram.com/web/consent/check_age_eligibility/',headers=__header,data=age_data,proxies=proxy)
                 assert check_Age.status_code == 200
                 device = uuid.uuid4().hex
                 verify_data = {
                     'device_id':device,
                     'email':self.__mail
                 }
-                verify_mail = session.post("https://i.instagram.com/api/v1/accounts/send_verify_email/",headers=__header,data=verify_data)
+                verify_mail = session.post("https://i.instagram.com/api/v1/accounts/send_verify_email/",headers=__header,data=verify_data,proxies=proxy)
                 assert verify_mail.status_code == 200
                 while len(self.verify_code) < 1:
                     sleep(1)
@@ -133,7 +158,7 @@ class InstagramCreateAccount(__TempMail):
                         'email':self.__mail
                     }
                     if len(self.verify_code) > 1:
-                        check_code = session.post("https://i.instagram.com/api/v1/accounts/check_confirmation_code/",headers=__header,data=verify_dataV2)
+                        check_code = session.post("https://i.instagram.com/api/v1/accounts/check_confirmation_code/",headers=__header,data=verify_dataV2,proxies=proxy)
                         last_data = {
                             "enc_password":__data["enc_password"],
                             "email":__data["email"],
@@ -147,15 +172,16 @@ class InstagramCreateAccount(__TempMail):
                             "tos_version":'eu',
                             "force_sign_up_code":check_code.json()['signup_code']
                         }
-                        last_verify = session.post("https://www.instagram.com/accounts/web_create_ajax/",headers=__header,data=last_data)
+                        last_verify = session.post("https://www.instagram.com/accounts/web_create_ajax/",headers=__header,data=last_data,proxies=proxy)
                         
                         accounts.update({count: {"mail" : self.__mail,"password":password,"user_name":__data["username"],
                         "account_created" : last_verify.json()['account_created'],"user_id" : last_verify.json()['user_id'],"status" : last_verify.json()['status']}})
 
                 print(f"\t🟢 {Fore.YELLOW}Account Created")
-            except Exception as e:
-                print(f"\t🔴 {Fore.YELLOW}ERR {e}")
+            except:
+                print(f"\t🔴 {Fore.YELLOW}ERR")
                 errcount += 1
+                
 
     def writeJsonFile(self):
         with open("users.json","w") as file:
@@ -163,26 +189,36 @@ class InstagramCreateAccount(__TempMail):
 
 class MultiAccount:
     def __init__(self) -> None:
-        print(Console.MULTI_ACCOUNT_BANNER+f"\tPlease write account cout\n\t\t[ {Fore.MAGENTA}e{Fore.CYAN} ] Exit\n")
-        while True:
-            input_ = input(Console.COMMAND_LINE)
-            if input_.lower() == 'e':
+        global usingProxy
+        # print(f"\t{Fore.CYAN}[ {Fore.MAGENTA}0{Fore.CYAN} ] Follow{'':<8}<{Fore.MAGENTA}Belirtilen Hesap takip edilir{Fore.CYAN}>")
+        # print(f"\t{Fore.CYAN}[ {Fore.MAGENTA}1{Fore.CYAN} ] Post Like{'':<5}<{Fore.MAGENTA}Belirtilen hesaptaki postu beğenir{Fore.CYAN}>")
+        print(f"\t{Fore.CYAN}[ {Fore.MAGENTA}e{Fore.CYAN} ] Exit\n")
+
+        input_ = input(Console.COMMAND_LINE)
+        if input_.lower() == 'e':
                 print("Bye")
                 sleep(1)
-                os.system("cls")
-                break
-            else:
-                try:
-                    for i in range(1,int(input_)+1):
-                        ig = InstagramCreateAccount()
-                        ig.redirectEmailSignUp()
-                        choice_passw = choice(ig.randomPassword())
-                        ig.attempt(count=i,password=choice_passw)
+                os.system('cls' if os.name == 'nt' else 'clear')
+                sys.exit(0)
 
+        proxy_input_ = input(Console.PROXY_CMD_LINE)
+        if input_.lower() != 'e':
+            # try:
+                os.system('cls' if os.name == 'nt' else 'clear')
+                print(Console.MULTI_ACCOUNT_BANNER)
+                for i in range(1,int(input_)+1):
+                    ig = InstagramCreateAccount(prxtype_=proxy_input_,first=i)
+                    usingProxy = False
+                    ig.redirectEmailSignUp()
+                    choice_passw = choice(ig.randomPassword())
+                    ig.attempt(count=i,password=choice_passw)
+
+                if accounts != {}:
                     print(f"\n\t🟣 {Fore.YELLOW}Written to users.json")
                     ig.writeJsonFile()
-                    print(f"\t🟢 {Fore.YELLOW}Finished")
-                    print(f"\t🟡 {Fore.YELLOW}{errcount} Errors encountered")
-                    sleep(1)
-                except ValueError:
-                    print(f"\t🔴 {Fore.YELLOW}Undefined")
+
+                print(f"\t🟢 {Fore.YELLOW}Finished")
+                print(f"\t🟡 {Fore.YELLOW}{errcount} Errors encountered")
+                sleep(1)
+            # except ValueError:
+            #         print(f"\t🔴 {Fore.YELLOW}Undefined")
