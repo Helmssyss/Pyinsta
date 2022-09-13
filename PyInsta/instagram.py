@@ -1,8 +1,10 @@
+# Author: Arif "Helmsys"
+
 import os
 import requests
 import json
 from datetime import datetime
-from fake_useragent import UserAgent # user-agent sınıfı
+from fake_useragent import UserAgent
 from configparser import ConfigParser
 from .utils import(URL_Shortened,LinkParser)
 from getpass import getuser
