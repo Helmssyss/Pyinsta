@@ -67,5 +67,9 @@ This dm read only reads the top message (without leaving it seen). I guess I nee
 python app.py -v user_name -w wordlist.txt -px proxy_file.txt -t 40
 ```
 
-
+# Multi Account
+```
+> python app.py --create-account
+```
+•••••
 It will be developed over time...
