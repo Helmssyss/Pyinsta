@@ -1,4 +1,5 @@
-import sys
+# Author: Arif "Helmsys"
+
 from threading import Thread
 from urllib3 import disable_warnings
 from requests import Session
@@ -10,6 +11,7 @@ from colorama import (init, Fore)
 from datetime import datetime
 from random import (choice,randint)
 from string import ascii_uppercase
+import sys
 import uuid
 import json
 import os
