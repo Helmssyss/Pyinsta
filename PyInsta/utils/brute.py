@@ -1,3 +1,5 @@
+# Author: Arif "Helmsys"
+
 from time import time
 from .proxychecker import ProxyChecker
 from .console import (Console,runnerBruteBanner)
