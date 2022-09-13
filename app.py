@@ -1,16 +1,16 @@
 # Author: Arif "Helmsys"
 # Python Version : 3.9.x
 
-import os
-import sys
-import shutil
+from platform import python_version
 from colorama import init,Fore
 from time import sleep
 from PyInsta import (Instagram, Console, Bruter, MultiAccount)
 from argparse import ArgumentParser
 from getpass import getuser
 from configparser import ConfigParser
-from platform import python_version
+import os
+import sys
+import shutil
 
 init(autoreset=True) # Colorama
 class App(Instagram):
@@ -84,6 +84,7 @@ if(__name__ == "__main__"):
             print(f"{Fore.GREEN}python app.py -v user_name -w wordlist.txt -px proxy_file.txt -t 40{Fore.RESET}")
 
         elif(arguments.create_account):
+            print(Console.MULTI_ACCOUNT_BANNER)
             MultiAccount()
 
         elif(arguments.proxy and arguments.wordlist and arguments.victim):
