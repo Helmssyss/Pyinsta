@@ -12,7 +12,7 @@ For Windows only
 > python app.py -h
 ...
 usage: app.py [-h] [-u USERNAME] [-p PASSWORD] [-px PROXY] [-v VICTIM] [-w WORDLIST] [-t THREAD]
-              [-b]
+              [-b] [--create-account]
 
 How to Using
 
@@ -23,7 +23,7 @@ optional arguments:
   -p PASSWORD, --password PASSWORD
                         Instagram Password
   -px PROXY, --proxy PROXY
-                        Specify proxy type [socks4, socks5, http] Or write the proxy file you have
+                        Specify proxy type [socks4, socks5, http] or write the proxy file you have
   -v VICTIM, --victim VICTIM
                         Victim username
   -w WORDLIST, --wordlist WORDLIST
@@ -31,8 +31,9 @@ optional arguments:
   -t THREAD, --thread THREAD
                         Specify Number of Threads [4, 5, 6, ..., 40, ...]
   -b, --brute-force
+  --create-account      Create Instagram Multi Account
 
-First time to login to Instagram >python app.py -u my_user_name -p my_password
+First time to login to Instagram > python app.py -u my_user_name -p my_password
 ```
 
 *First Login*
