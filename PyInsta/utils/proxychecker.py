@@ -21,16 +21,17 @@ class ProxyChecker:
             self.__allproxy.remove('')
             self.__isWorkerProxy()
         else:
-            try:
-                print(f"{Fore.YELLOW}[{self.__filePath}]  ─────  Reading Proxy file")
-                sleep(2)
-                with open(self.__filePath,"r") as prxfile:
-                    self.__allproxy =prxfile.readlines()
-                    for prx in range(len(self.__allproxy)):
-                        self.__allproxy[prx] = self.__allproxy[prx].replace("\n","")
-                    self.__isWorkerProxy()
-            except FileNotFoundError:
-                print(f"{Fore.RED}Please Specify the Path of the Proxy File{Fore.RESET}")
+            if self.__prxtype != 'false':
+                try:
+                    print(f"{Fore.YELLOW}[{self.__filePath}]  ─────  Reading Proxy file")
+                    sleep(2)
+                    with open(self.__filePath,"r") as prxfile:
+                        self.__allproxy =prxfile.readlines()
+                        for prx in range(len(self.__allproxy)):
+                            self.__allproxy[prx] = self.__allproxy[prx].replace("\n","")
+                        self.__isWorkerProxy()
+                except FileNotFoundError:
+                    print(f"{Fore.RED}Please Specify the Path of the Proxy File{Fore.RESET}")
 
     @property
     def __scrap(self) -> Generator[str,str,str]:
@@ -57,9 +58,9 @@ class ProxyChecker:
                 try:
                     future.result()
                 except:
-                    print(f"{Fore.RED}UNSUCCESSFUL : {value}{Fore.RESET}")
+                    print(f"\t🔴 {Fore.RED}UNSUCCESSFUL : {value}{Fore.RESET}")
                 else:
-                    print(f"{Fore.GREEN}SUCCESSFUL   : {value}{Fore.RESET}")
+                    print(f"\t🟢 {Fore.GREEN}SUCCESSFUL   : {value}{Fore.RESET}")
                     self.__worker.append(value)
     @property
     def getWorkerProxy(self) -> list[str]:
