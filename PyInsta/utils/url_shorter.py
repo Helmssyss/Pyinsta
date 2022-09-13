@@ -1,4 +1,4 @@
-# Author: Helmsys
+# Author: Arif "Helmsys"
 
 import requests
 from bs4 import BeautifulSoup
