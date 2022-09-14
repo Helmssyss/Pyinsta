@@ -1,16 +1,14 @@
-# Author: Arif "Helmsys"
-
 from getpass import getuser
 from time import strftime
 from colorama import (init,Fore,Style)
 import os
-import sys
 
 init(autoreset=True)
 class Console:
     BOLD      = '\033[1m'
     ITALIC    = '\x1B[3m'
     COMMAND_LINE = f"{Fore.RESET}{Style.BRIGHT}{Fore.GREEN}pyinsta@{getuser()}:{Fore.BLUE}~{os.getcwd().split(getuser())[1]}{Fore.RESET}{BOLD}$ "
+    PROXY_CMD_LINE = f"{Fore.RESET}{Style.BRIGHT}{Fore.GREEN}pyinsta@{getuser()}:{Fore.BLUE}~[PROXY]{Fore.RESET}{BOLD}$ "
     BANNER_BRUTE = f"""{BOLD}{Fore.CYAN}
     ____           __                 
    /  _/___  _____/ /_____ _ 
