@@ -84,7 +84,7 @@ class InstagramCreateAccount(__TempMail):
         try:
             with Session() as session:
                 header = {"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246"}
-                self.__redirectcookies.update(session.get("https://www.instagram.com/accounts/emailsignup/",headers=header).cookies.get_dict())
+                self.__redirectcookies.update(session.get("https://i.instagram.com/api/v1/web/login_page/",headers=header).cookies.get_dict())
         except:
             pass
 
