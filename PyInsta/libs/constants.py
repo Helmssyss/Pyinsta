@@ -1,0 +1,5 @@
+ATTEMPT            = "https://www.instagram.com/accounts/web_create_ajax/attempt/"
+CHECKAGELIGIBILITY = "https://www.instagram.com/web/consent/check_age_eligibility/"
+VERIFYMAIL         = "https://i.instagram.com/api/v1/accounts/send_verify_email/"
+CHECKCODE          = "https://i.instagram.com/api/v1/accounts/check_confirmation_code/"
+LASTVERIFY         = "https://www.instagram.com/accounts/web_create_ajax/"
