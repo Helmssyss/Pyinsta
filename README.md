@@ -1,3 +1,4 @@
+[![Hits](https://hits.sh/github.com/Arif-Helmsys/Pyinsta.svg?label=views&color=007ec6)](https://hits.sh/github.com/Arif-Helmsys/Pyinsta/)
 # Instagram
 
 For Windows only
