@@ -46,15 +46,18 @@ First time to login to Instagram > python app.py -u my_user_name -p my_password
 ```
 
 As you can see in our command line, there is a "$" sign. It says it's on our main command line. If this sign is "#", it informs that we will take action on the previous line. I give an example;
+<div align="center">
+  <img src="https://i.hizliresim.com/1hfqzis.png" width=60% height=60%>
+</div>
 
-<img src="https://i.hizliresim.com/1hfqzis.png" width=60% height=60%>
 In the link specified as the post thumbnail, there is the link of the most recent post. It was too long so I scraped it at the back and converted it to a short urly.
 
 Now I will show you how to read a message from DM.
 This dm read only reads the top message (without leaving it seen). I guess I need to apply a different action to read other messages.
 
-<img src="https://i.hizliresim.com/23a1z8r.jpg" width=60% height=60%>
-
+<div align="center">
+  <img src="https://i.hizliresim.com/23a1z8r.jpg" width=60% height=60%>
+</div>
 - It creates a folder named "PyInsta" in the "Documents" folder on our computer. If you want to delete it after using it, you can delete the folder mentioned in the path I mentioned yourself.
 
 # BruteForce For Instagram
@@ -65,7 +68,16 @@ This dm read only reads the top message (without leaving it seen). I guess I nee
 -v/--victim   : VICTIM
 -px/--proxy   : PROXY TYPE ['http','socks4','socks5'] or PROXY FILE
 
+
+
 python app.py -v user_name -w wordlist.txt -px proxy_file.txt -t 40
 ```
+<div align="center">
+  <img src="https://github.com/Helmssyss/Pyinsta/assets/84701901/502fca6a-1e34-4344-9dbc-8d58237f1033" width=60% height=60%>
+  <img src="https://github.com/Helmssyss/Pyinsta/assets/84701901/94a31380-edfd-4256-9f14-531ccddc965a" width=30% height=30%>
+</div>
 
-[![Hits](https://hits.sh/github.com/Arif-Helmsys/Pyinsta.svg?label=views&color=007ec6)](https://hits.sh/github.com/Arif-Helmsys/Pyinsta/)
+<div align="center">
+  
+  <b>[![Hits](https://hits.sh/github.com/Arif-Helmsys/Pyinsta.svg?label=views&color=007ec6)](https://hits.sh/github.com/Arif-Helmsys/Pyinsta/)</b>
+</div>
