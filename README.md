@@ -1,4 +1,3 @@
-[![Hits](https://hits.sh/github.com/Arif-Helmsys/Pyinsta.svg?label=views&color=007ec6)](https://hits.sh/github.com/Arif-Helmsys/Pyinsta/)
 # Instagram
 
 For Windows only
@@ -69,8 +68,4 @@ This dm read only reads the top message (without leaving it seen). I guess I nee
 python app.py -v user_name -w wordlist.txt -px proxy_file.txt -t 40
 ```
 
-# Multi Account
-```
-> python app.py --create-account
-```
-•••••
+[![Hits](https://hits.sh/github.com/Arif-Helmsys/Pyinsta.svg?label=views&color=007ec6)](https://hits.sh/github.com/Arif-Helmsys/Pyinsta/)
