@@ -3,3 +3,4 @@ beautifulsoup4==4.9.3
 fake-useragent==0.1.11
 python-dotenv==0.20.0
 colorama==0.4.5
+aiohttp==3.8.3
