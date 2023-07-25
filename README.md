@@ -1,9 +1,9 @@
 # Instagram
 
-For Windows only
-
 Fixed:
  - CSRF token
+
+--- 
 
 ```bash
 > cd Desktop
