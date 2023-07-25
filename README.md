@@ -2,6 +2,9 @@
 
 For Windows only
 
+Fixed:
+ - CSRF token
+
 ```bash
 > cd Desktop
 > git clone https://github.com/Arif-Helmsys/Pyinsta.git
