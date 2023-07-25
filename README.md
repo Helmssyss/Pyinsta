@@ -1,6 +1,6 @@
 # Instagram
 
-Fixed:
+Solved:
  - CSRF token
 
 --- 
