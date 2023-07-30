@@ -91,7 +91,7 @@ if(__name__ == "__main__"):
                 Bruter(wordlist=arguments.wordlist,proxy_type=arguments.proxy.lower(),victim=arguments.victim,max_thread=arguments.thread)
 
         else:
-            if(not os.path.exists(f"C:\\Users\\{getuser()}\\Documents\\PyInsta\\.env") and not os.path.exists(f"C:\\Users\\{getuser()}\\Documents\\PyInsta\\account.ini")):
+            if(not os.path.exists(r".\.env") and not os.path.exists(r".\account.ini")):
                 try:
                     if(sys.argv[2] and sys.argv[4]):
                         App(arguments.username,arguments.password)
@@ -100,8 +100,8 @@ if(__name__ == "__main__"):
 
             else:
                 cfg = ConfigParser()
-                cfg.read(f"C:\\Users\\{getuser()}\\Documents\\PyInsta\\account.ini","utf-8")
+                cfg.read(r".\account.ini","utf-8")
                 App(cfg["ACCOUNT"]["username"],cfg["ACCOUNT"]["password"])
 
     else:
-        print(f"{Fore.RED}Only works in 3.9{Fore.RESET}")
+        print(f"{Fore.RED}Only works in 3.9.x{Fore.RESET}")

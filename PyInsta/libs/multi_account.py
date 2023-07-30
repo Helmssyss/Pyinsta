@@ -1,4 +1,3 @@
- ################################### NOT COMPLETED ###################################
 # Author: Arif "Helmsys"
 
 from time import sleep
@@ -18,6 +17,7 @@ import os
 init(autoreset=True)
 accounts = {}
 errcount = 0
+ac_count = 0
 usingProxy = False
 proxyList = []
 class __TempMail:
@@ -37,6 +37,7 @@ class __TempMail:
             }
 
     async def getCookies(self):
+        print("Cookie Alınıyor...")
         await asyncio.gather(self.__getPHPSESSID(),self.__createAccount())
 
     async def __getPHPSESSID(self):
@@ -71,7 +72,7 @@ class __CreateAccount(__TempMail):
     def __init__(self) -> None:
         super().__init__()
         self.__redirectcookies = {}
-    
+
     async def __redirectEmailSignUp(self) -> None: # CSRFTOKEN alınır
         async with aiohttp.ClientSession(cookie_jar=aiohttp.CookieJar()) as session:
             __header__ = {"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246"}
@@ -123,7 +124,6 @@ class __CreateAccount(__TempMail):
             }
             __account_create__ = await session.post(ATTEMPT,headers=__header,data=__data,cookies=self.__redirectcookies)
             await session.post(CHECKAGELIGIBILITY,headers=__header,data=__age_data)
-            await asyncio.sleep(.30)
             await session.post(VERIFYMAIL,headers=__header,data=__verify_data)
             while len(self.verify_code) < 1:
                 print("while döngüsünde")
@@ -134,6 +134,7 @@ class __CreateAccount(__TempMail):
                     'email':self.__mail
                 }
                 if len(self.verify_code) > 1:
+                    print("sa")
                     __check_code = await session.post(CHECKCODE,headers=__header,data=__verifydataV2)
                     __check_code = await __check_code.json()
                     last_data = {
@@ -183,9 +184,9 @@ class MultiAccount(__CreateAccount):
         if input_.lower() != 'e':
             os.system('cls' if os.name == 'nt' else 'clear')
             print(Console.MULTI_ACCOUNT_BANNER)
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            loop.run_until_complete(self.__subinit__(input_))
+            # loop = asyncio.new_event_loop()
+            # asyncio.set_event_loop(loop)
+            asyncio.run(self.__subinit__(input_))
     
     async def __subinit__(self,input_:int):
         try:
@@ -194,7 +195,9 @@ class MultiAccount(__CreateAccount):
                 print("Ana döngü",_)
                 await self.getCookies()
                 await asyncio.sleep(.30)
-                await asyncio.gather(asyncio.create_task(self.instAttempt(_)),asyncio.create_task(self.inboxRefresh()))
+                await self.instAttempt(_)
+                await asyncio.sleep(.30)
+                await self.inboxRefresh()
 
             if accounts != {}:
                 self.writeJsonFile()
